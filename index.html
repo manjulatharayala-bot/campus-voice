@@ -1,0 +1,992 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CampusCare - Campus Problem Reporting</title>
+
+<style>
+:root {
+  --green: #176b4d;
+  --light: #eaf6ef;
+  --bg: #f5f8f7;
+  --text: #20332c;
+  --muted: #718078;
+  --border: #e0e9e3;
+  --white: #ffffff;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+button, input, select, textarea { font: inherit; }
+button { cursor: pointer; }
+
+header {
+  background: white;
+  border-bottom: 1px solid var(--border);
+  padding: 15px 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.brand { display: flex; align-items: center; gap: 10px; }
+.logo {
+  background: var(--green);
+  color: white;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 23px;
+}
+.brand h2 { margin: 0; font-size: 21px; }
+.brand small { color: var(--muted); }
+
+button {
+  border: 0;
+  border-radius: 9px;
+  padding: 11px 15px;
+  font-weight: 600;
+}
+.primary { background: var(--green); color: white; }
+.secondary { background: var(--light); color: var(--green); }
+
+main { max-width: 1200px; margin: auto; padding: 25px 5%; }
+
+.hero {
+  padding: 30px;
+  border-radius: 20px;
+  background: linear-gradient(120deg, #155b43, #298565);
+  color: white;
+  margin-bottom: 22px;
+}
+.hero h1 { font-size: clamp(27px, 4vw, 39px); margin: 10px 0; }
+.hero p { line-height: 1.7; max-width: 650px; }
+.tag {
+  display: inline-block;
+  background: #ffffff25;
+  padding: 7px 12px;
+  border-radius: 30px;
+  font-size: 12px;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.stat, .panel, .complaint, .category-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+}
+
+.stat { padding: 19px; }
+.stat small, .muted { color: var(--muted); }
+.number { font-size: 29px; font-weight: bold; margin: 9px 0; }
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.panel { padding: 22px; margin-bottom: 20px; min-width: 0; }
+.panel h2 { margin-top: 0; font-size: 21px; }
+
+label {
+  display: block;
+  font-weight: 600;
+  font-size: 13px;
+  margin: 15px 0 7px;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d8e3dc;
+  border-radius: 9px;
+  background: white;
+  color: var(--text);
+}
+
+textarea { resize: vertical; min-height: 95px; }
+
+input:focus, select:focus, textarea:focus {
+  outline: 2px solid #a6d8bd;
+}
+
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+.checkline {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  font-weight: normal;
+}
+.checkline input { width: auto; }
+
+.hint { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+.notice {
+  background: #fff7df;
+  color: #795914;
+  padding: 12px;
+  border-radius: 9px;
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 12px 0;
+}
+
+.tabs { display: flex; gap: 7px; overflow-x: auto; margin-bottom: 20px; }
+.tab { background: white; color: var(--text); border: 1px solid var(--border); white-space: nowrap; }
+.tab.active { background: var(--green); color: white; }
+
+.page { display: none; }
+.page.active { display: block; }
+
+.complaint { padding: 17px; margin-bottom: 12px; }
+.complaint-top { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.complaint h3 { font-size: 16px; margin: 10px 0; }
+.complaint p { line-height: 1.55; overflow-wrap: anywhere; }
+
+.badge {
+  display: inline-block;
+  padding: 6px 9px;
+  border-radius: 30px;
+  font-size: 11px;
+  font-weight: bold;
+  background: #edf1ef;
+}
+.submitted { background: #e7efff; color: #2854a4; }
+.under-review { background: #fff0d6; color: #8c5a00; }
+.in-progress { background: #e7e3ff; color: #5c42a4; }
+.resolved { background: #ddf5e4; color: #176b4d; }
+.emergency { background: #ffe2e2; color: #b21f2d; }
+.high { background: #ffebd9; color: #a44d00; }
+
+.actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+.actions button { font-size: 12px; padding: 9px 11px; }
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.category-card { padding: 17px; text-align: center; }
+.emoji { font-size: 28px; }
+.category-card p { margin-bottom: 0; font-size: 12px; color: var(--muted); }
+
+.empty { text-align: center; padding: 28px 10px; color: var(--muted); }
+hr { border: 0; border-top: 1px solid var(--border); margin: 17px 0; }
+
+img.proof {
+  width: 100%;
+  max-height: 240px;
+  object-fit: contain;
+  background: #f3f5f4;
+  border-radius: 10px;
+}
+
+.bar-row { margin: 14px 0; }
+.bar-label { display: flex; justify-content: space-between; gap: 10px; font-size: 13px; }
+.bar { height: 9px; border-radius: 9px; background: #e9efeb; overflow: hidden; margin-top: 6px; }
+.bar-fill { height: 100%; background: #2c946b; border-radius: 9px; }
+
+footer { text-align: center; padding: 25px; color: var(--muted); font-size: 12px; }
+
+#toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #173f30;
+  color: white;
+  padding: 13px 18px;
+  border-radius: 10px;
+  display: none;
+  max-width: 90%;
+  z-index: 10;
+}
+
+@media(max-width:760px) {
+  .layout { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .category-grid { grid-template-columns: repeat(2, 1fr); }
+  main { padding: 18px 4%; }
+  .hero { padding: 22px; }
+  .panel { padding: 17px; }
+}
+
+@media(max-width:380px) {
+  .two { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="brand">
+    <div class="logo">🏫</div>
+    <div>
+      <h2>CampusCare</h2>
+      <small>Report it. Track it. Resolve it.</small>
+    </div>
+  </div>
+  <div>
+    <button class="secondary" onclick="showPage('track')">My Complaints</button>
+    <button class="primary" onclick="showPage('report')">+ Report Problem</button>
+  </div>
+</header>
+
+<main>
+
+<section class="hero">
+  <span class="tag">YOUR CAMPUS • YOUR VOICE</span>
+  <h1>A Better Campus Starts With You.</h1>
+  <p>Report campus problems in one place. Follow every update and help your college become safer, cleaner and better for everyone.</p>
+  <button style="background:white;color:#176b4d" onclick="showPage('report')">
+    Report a Problem →
+  </button>
+</section>
+
+<div class="tabs">
+  <button class="tab active" data-page="home" onclick="showPage('home')">Overview</button>
+  <button class="tab" data-page="report" onclick="showPage('report')">Report Problem</button>
+  <button class="tab" data-page="track" onclick="showPage('track')">Track Complaints</button>
+  <button class="tab" data-page="admin" onclick="showPage('admin')">Admin Dashboard</button>
+  <button class="tab" data-page="analytics" onclick="showPage('analytics')">Analytics</button>
+</div>
+
+<!-- HOME PAGE -->
+<section id="home" class="page active">
+
+  <div class="stats">
+    <div class="stat"><small>Total complaints</small><div class="number" id="totalStat">0</div><small>All reports</small></div>
+    <div class="stat"><small>In progress</small><div class="number" id="progressStat">0</div><small>Being addressed</small></div>
+    <div class="stat"><small>Resolved</small><div class="number" id="resolvedStat">0</div><small>Marked resolved</small></div>
+    <div class="stat"><small>Urgent</small><div class="number" id="urgentStat">0</div><small>High or emergency</small></div>
+  </div>
+
+  <div class="layout">
+    <div class="panel">
+      <h2>📢 Recent Campus Reports</h2>
+      <p class="muted">Latest complaints on this device.</p>
+      <div id="recentList"></div>
+    </div>
+
+    <div class="panel">
+      <h2>👋 Welcome to CampusCare</h2>
+      <p>Help improve campus facilities by reporting problems with clear descriptions and locations.</p>
+      <hr>
+      <h3>How it works</h3>
+      <p>1. Submit a complaint.</p>
+      <p>2. The responsible department reviews it.</p>
+      <p>3. Track progress through the website.</p>
+      <p>4. Give feedback after resolution.</p>
+      <div class="notice">
+        For immediate danger, contact campus security or local emergency services directly. This demo does not send emergency alerts.
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>🧩 Problem Categories</h2>
+    <div class="category-grid">
+      <div class="category-card"><div class="emoji">🏫</div><b>Classrooms</b><p>Classroom facilities</p></div>
+      <div class="category-card"><div class="emoji">🚰</div><b>Water & Sanitation</b><p>Water supply</p></div>
+      <div class="category-card"><div class="emoji">💡</div><b>Electricity</b><p>Lights and power</p></div>
+      <div class="category-card"><div class="emoji">📶</div><b>Wi-Fi & Internet</b><p>Network problems</p></div>
+      <div class="category-card"><div class="emoji">🪑</div><b>Furniture</b><p>Desks and chairs</p></div>
+      <div class="category-card"><div class="emoji">🚻</div><b>Washrooms</b><p>Cleanliness and repairs</p></div>
+      <div class="category-card"><div class="emoji">🛣️</div><b>Infrastructure</b><p>Roads and buildings</p></div>
+      <div class="category-card"><div class="emoji">🍽️</div><b>Mess & Food</b><p>Food and hygiene</p></div>
+      <div class="category-card"><div class="emoji">🏥</div><b>Health & Medical</b><p>Medical facilities</p></div>
+      <div class="category-card"><div class="emoji">🛡️</div><b>Security</b><p>Campus safety</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- REPORT PAGE -->
+<section id="report" class="page">
+  <div class="layout">
+
+    <div class="panel">
+      <h2>📝 Report a Campus Problem</h2>
+      <p class="muted">Provide accurate details to help the concerned department.</p>
+
+      <form id="complaintForm">
+
+        <label for="studentId">College ID *</label>
+        <input id="studentId" placeholder="e.g. STU2026001" maxlength="40" required>
+        <p class="hint">Demo only: this does not verify your actual college ID.</p>
+
+        <div class="two">
+          <div>
+            <label for="category">Problem category *</label>
+            <select id="category" required>
+              <option value="">Select category</option>
+              <option>Classrooms</option>
+              <option>Water and Sanitation</option>
+              <option>Electricity and Lighting</option>
+              <option>Wi-Fi and Internet</option>
+              <option>Furniture</option>
+              <option>Washrooms</option>
+              <option>Roads and Infrastructure</option>
+              <option>Mess/Food</option>
+              <option>Health and Medical Facilities</option>
+              <option>Security</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="priority">Priority *</label>
+            <select id="priority" required>
+              <option>Low</option>
+              <option selected>Medium</option>
+              <option>High</option>
+              <option>Emergency</option>
+            </select>
+          </div>
+        </div>
+
+        <label for="location">Exact campus location *</label>
+        <input id="location" placeholder="e.g. Block B, 2nd floor, Room 204" maxlength="150" required>
+
+        <label for="title">Problem title *</label>
+        <input id="title" placeholder="e.g. Broken classroom fan" maxlength="100" required>
+
+        <label for="description">Detailed description *</label>
+        <textarea id="description" placeholder="Describe the problem and its effect on students..." maxlength="1500" required></textarea>
+
+        <label for="proof">Upload photo proof (optional)</label>
+        <input id="proof" type="file" accept="image/*">
+        <p class="hint">Demo accepts images up to 500 KB. Avoid uploading faces or sensitive information.</p>
+        <div id="proofPreview"></div>
+
+        <label class="checkline">
+          <input id="anonymous" type="checkbox">
+          Submit anonymously (hide my ID in the complaint display)
+        </label>
+
+        <div class="notice">
+          Emergency complaints are not automatically sent to security in this prototype. Contact the responsible authority directly.
+        </div>
+
+        <button type="submit" class="primary" style="width:100%">
+          Submit Complaint →
+        </button>
+      </form>
+    </div>
+
+    <div class="panel">
+      <h2>📋 Before You Submit</h2>
+      <p>✓ Select the correct category.</p>
+      <p>✓ Mention the building, floor or room.</p>
+      <p>✓ Describe the issue clearly.</p>
+      <p>✓ Choose an appropriate priority.</p>
+      <hr>
+      <h3>Complaint status guide</h3>
+      <p><span class="badge submitted">Submitted</span> Report recorded.</p>
+      <p><span class="badge under-review">Under Review</span> Awaiting assessment.</p>
+      <p><span class="badge in-progress">In Progress</span> Work is underway.</p>
+      <p><span class="badge resolved">Resolved</span> Marked as fixed.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TRACK COMPLAINTS PAGE -->
+<section id="track" class="page">
+  <div class="panel">
+    <h2>🔎 Track Complaints</h2>
+    <p class="muted">Search by complaint ID, title or location.</p>
+
+    <div class="two">
+      <div>
+        <label for="searchComplaint">Search complaints</label>
+        <input id="searchComplaint" placeholder="Enter ID, title or location" oninput="renderComplaints()">
+      </div>
+      <div>
+        <label for="statusFilter">Filter by status</label>
+        <select id="statusFilter" onchange="renderComplaints()">
+          <option value="">All statuses</option>
+          <option>Submitted</option>
+          <option>Under Review</option>
+          <option>In Progress</option>
+          <option>Resolved</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div id="complaintList"></div>
+</section>
+
+<!-- ADMIN PAGE -->
+<section id="admin" class="page">
+  <div class="panel">
+    <h2>🛠️ Admin Dashboard</h2>
+    <div class="notice">
+      Demo mode: these controls are not password-protected. A real website needs secure admin login and department permissions.
+    </div>
+
+    <div class="two">
+      <div>
+        <label for="adminSearch">Search reports</label>
+        <input id="adminSearch" placeholder="ID, category or location" oninput="renderAdmin()">
+      </div>
+      <div>
+        <label for="adminPriority">Priority filter</label>
+        <select id="adminPriority" onchange="renderAdmin()">
+          <option value="">All priorities</option>
+          <option>Emergency</option>
+          <option>High</option>
+          <option>Medium</option>
+          <option>Low</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div id="adminList"></div>
+</section>
+
+<!-- ANALYTICS PAGE -->
+<section id="analytics" class="page">
+  <div class="panel">
+    <h2>📊 Campus Problem Analytics</h2>
+    <p class="muted">Based on complaints saved in this browser.</p>
+    <div id="analyticsContent"></div>
+  </div>
+
+  <div class="panel">
+    <h2>📥 Export Reports</h2>
+    <p>Download complaint data as a CSV file.</p>
+    <button class="primary" onclick="exportCSV()">Download CSV</button>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  CampusCare — Student-powered campus improvement.<br>
+  College project prototype. Not an official college complaint service.
+</footer>
+
+<div id="toast" role="status"></div>
+
+<script>
+const STORAGE_KEY = "campuscare_complaints_v1";
+const STATUSES = [
+  "Submitted", "Under Review", "In Progress", "Resolved"
+];
+
+let complaints = loadComplaints();
+let proofData = "";
+
+function loadComplaints() {
+  try {
+    const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    return Array.isArray(data) ? data : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveComplaints() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(complaints));
+    return true;
+  } catch (error) {
+    toast("Storage full. Remove large images or old reports.");
+    return false;
+  }
+}
+
+function toast(message) {
+  const el = document.getElementById("toast");
+  el.textContent = message;
+  el.style.display = "block";
+  clearTimeout(window.toastTimer);
+  window.toastTimer = setTimeout(() => {
+    el.style.display = "none";
+  }, 3000);
+}
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, ch => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[ch]);
+}
+
+function showPage(page) {
+  document.querySelectorAll(".page").forEach(el => {
+    el.classList.toggle("active", el.id === page);
+  });
+
+  document.querySelectorAll(".tab").forEach(el => {
+    el.classList.toggle("active", el.dataset.page === page);
+  });
+
+  if (page === "home") renderHome();
+  if (page === "track") renderComplaints();
+  if (page === "admin") renderAdmin();
+  if (page === "analytics") renderAnalytics();
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function badgeClass(value) {
+  return ({
+    "Submitted": "submitted",
+    "Under Review": "under-review",
+    "In Progress": "in-progress",
+    "Resolved": "resolved",
+    "Emergency": "emergency",
+    "High": "high"
+  })[value] || "";
+}
+
+function makeId() {
+  return "CC-" + Date.now().toString().slice(-8) +
+    "-" + Math.floor(Math.random() * 90 + 10);
+}
+
+function departmentFor(category) {
+  const map = {
+    "Classrooms": "Facilities Department",
+    "Water and Sanitation": "Maintenance Department",
+    "Electricity and Lighting": "Electrical Department",
+    "Wi-Fi and Internet": "IT Department",
+    "Furniture": "Facilities Department",
+    "Washrooms": "Sanitation Department",
+    "Roads and Infrastructure": "Infrastructure Department",
+    "Mess/Food": "Mess Management",
+    "Health and Medical Facilities": "Medical Department",
+    "Security": "Campus Security"
+  };
+
+  return map[category] || "General Administration";
+}
+
+// Image upload and preview
+document.getElementById("proof").addEventListener("change", function() {
+  const file = this.files[0];
+  proofData = "";
+  document.getElementById("proofPreview").innerHTML = "";
+
+  if (!file) return;
+
+  if (!file.type.startsWith("image/")) {
+    toast("Please select an image file.");
+    this.value = "";
+    return;
+  }
+
+  if (file.size > 500 * 1024) {
+    toast("Choose an image smaller than 500 KB.");
+    this.value = "";
+    return;
+  }
+
+  const reader = new FileReader();
+
+  reader.onload = () => {
+    proofData = reader.result;
+
+    document.getElementById("proofPreview").innerHTML =
+      '<p class="hint">Image preview</p>' +
+      '<img class="proof" src="' + proofData +
+      '" alt="Complaint evidence">';
+  };
+
+  reader.readAsDataURL(file);
+});
+
+// Submit a complaint
+document.getElementById("complaintForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const studentId = document.getElementById("studentId").value.trim();
+  const category = document.getElementById("category").value;
+  const location = document.getElementById("location").value.trim();
+  const title = document.getElementById("title").value.trim();
+  const description = document.getElementById("description").value.trim();
+  const priority = document.getElementById("priority").value;
+  const anonymous = document.getElementById("anonymous").checked;
+
+  if (!studentId || !category || !location || !title || !description) {
+    toast("Please complete all required fields.");
+    return;
+  }
+
+  const duplicate = complaints.some(c =>
+    c.category === category &&
+    c.location.toLowerCase() === location.toLowerCase() &&
+    c.status !== "Resolved"
+  );
+
+  if (duplicate && !confirm(
+    "A similar unresolved complaint exists at this location. Submit anyway?"
+  )) return;
+
+  const now = new Date().toISOString();
+
+  const item = {
+    id: makeId(),
+    studentId: anonymous ? "" : studentId,
+    category,
+    location,
+    title,
+    description,
+    priority,
+    anonymous,
+    status: "Submitted",
+    department: departmentFor(category),
+    createdAt: now,
+    updatedAt: now,
+    history: [{ status: "Submitted", date: now }],
+    proof: proofData,
+    feedback: "",
+    resolutionProof: ""
+  };
+
+  complaints.unshift(item);
+
+  if (!saveComplaints()) {
+    complaints.shift();
+    return;
+  }
+
+  this.reset();
+  proofData = "";
+  document.getElementById("proofPreview").innerHTML = "";
+
+  toast("Complaint submitted: " + item.id);
+  renderAll();
+  showPage("track");
+});
+
+// Build complaint cards
+function complaintCard(c, adminMode = false) {
+  const proof = c.proof
+    ? '<img class="proof" src="' + c.proof +
+      '" alt="Complaint evidence">'
+    : "";
+
+  const history = (c.history || []).map(h =>
+    '<p class="hint">• ' + escapeHTML(h.status) + ' — ' +
+    escapeHTML(new Date(h.date).toLocaleString()) + '</p>'
+  ).join("");
+
+  const statusOptions = STATUSES.map(s =>
+    '<option ' + (s === c.status ? "selected" : "") +
+    ' value="' + s + '">' + s + '</option>'
+  ).join("");
+
+  let adminControls = "";
+
+  if (adminMode) {
+    adminControls = `
+      <label>Status update</label>
+      <select id="status-${escapeHTML(c.id)}">${statusOptions}</select>
+
+      <label>Department</label>
+      <input id="dept-${escapeHTML(c.id)}"
+        value="${escapeHTML(c.department)}" maxlength="100">
+
+      <label>Resolution proof (optional image)</label>
+      <input type="file" id="resolution-${escapeHTML(c.id)}" accept="image/*">
+
+      <div class="actions">
+        <button class="primary"
+          onclick="updateComplaint('${escapeHTML(c.id)}')">Save Update</button>
+        <button class="secondary"
+          onclick="exportOne('${escapeHTML(c.id)}')">Export Report</button>
+      </div>`;
+  }
+
+  const feedback = c.status === "Resolved" && !adminMode
+    ? `<hr>
+       <label for="feedback-${escapeHTML(c.id)}">Your feedback</label>
+       <textarea id="feedback-${escapeHTML(c.id)}" maxlength="500"
+       placeholder="Was the problem resolved satisfactorily?">${escapeHTML(c.feedback)}</textarea>
+       <button class="secondary"
+       onclick="saveFeedback('${escapeHTML(c.id)}')">Submit Feedback</button>`
+    : "";
+
+  const resolutionProof = c.resolutionProof
+    ? '<p><b>Resolution evidence:</b></p><img class="proof" src="' +
+      c.resolutionProof + '" alt="Resolution evidence">'
+    : "";
+
+  return `
+    <article class="complaint">
+      <div class="complaint-top">
+        <div>
+          <span class="badge">${escapeHTML(c.id)}</span>
+          <span class="badge ${badgeClass(c.priority)}">${escapeHTML(c.priority)}</span>
+        </div>
+        <span class="badge ${badgeClass(c.status)}">${escapeHTML(c.status)}</span>
+      </div>
+
+      <h3>${escapeHTML(c.title)}</h3>
+      <p class="muted">${escapeHTML(c.category)} · ${escapeHTML(c.location)}</p>
+      <p>${escapeHTML(c.description)}</p>
+      ${proof}
+      <hr>
+      <p class="hint">Assigned to: ${escapeHTML(c.department)}</p>
+      <p class="hint">Reported: ${escapeHTML(new Date(c.createdAt).toLocaleString())}</p>
+      <p class="hint">Reporter: ${c.anonymous ? "Anonymous" : escapeHTML(c.studentId)}</p>
+
+      <details>
+        <summary>View status history</summary>
+        ${history}
+      </details>
+
+      ${resolutionProof}
+      ${adminControls}
+      ${feedback}
+    </article>`;
+}
+
+// Home dashboard
+function renderHome() {
+  document.getElementById("totalStat").textContent = complaints.length;
+
+  document.getElementById("progressStat").textContent =
+    complaints.filter(c => c.status === "In Progress").length;
+
+  document.getElementById("resolvedStat").textContent =
+    complaints.filter(c => c.status === "Resolved").length;
+
+  document.getElementById("urgentStat").textContent =
+    complaints.filter(c =>
+      ["High", "Emergency"].includes(c.priority) &&
+      c.status !== "Resolved"
+    ).length;
+
+  document.getElementById("recentList").innerHTML = complaints.length
+    ? complaints.slice(0, 3).map(c => complaintCard(c)).join("")
+    : '<div class="empty">No reports yet.<br>Be the first to report a problem!</div>';
+}
+
+// Student complaint tracking
+function renderComplaints() {
+  const query = (
+    document.getElementById("searchComplaint")?.value || ""
+  ).toLowerCase();
+
+  const status = document.getElementById("statusFilter")?.value || "";
+
+  const list = complaints.filter(c =>
+    (!status || c.status === status) &&
+    [c.id, c.title, c.location, c.category].some(v =>
+      String(v).toLowerCase().includes(query)
+    )
+  );
+
+  document.getElementById("complaintList").innerHTML = list.length
+    ? list.map(c => complaintCard(c)).join("")
+    : '<div class="panel empty">No matching complaints found.</div>';
+}
+
+// Admin dashboard
+function renderAdmin() {
+  const query = (
+    document.getElementById("adminSearch")?.value || ""
+  ).toLowerCase();
+
+  const priority = document.getElementById("adminPriority")?.value || "";
+
+  const rank = { Emergency: 0, High: 1, Medium: 2, Low: 3 };
+
+  const list = complaints.filter(c =>
+    (!priority || c.priority === priority) &&
+    [c.id, c.title, c.location, c.category, c.department].some(v =>
+      String(v).toLowerCase().includes(query)
+    )
+  ).sort((a, b) =>
+    rank[a.priority] - rank[b.priority] ||
+    new Date(a.createdAt) - new Date(b.createdAt)
+  );
+
+  document.getElementById("adminList").innerHTML = list.length
+    ? list.map(c => complaintCard(c, true)).join("")
+    : '<div class="panel empty">No complaints to manage.</div>';
+}
+
+// Admin updates
+function updateComplaint(id) {
+  const c = complaints.find(item => item.id === id);
+  if (!c) return;
+
+  const newStatus = document.getElementById("status-" + id).value;
+  const newDepartment = document.getElementById("dept-" + id).value.trim();
+  const file = document.getElementById("resolution-" + id).files[0];
+
+  if (!newDepartment) {
+    toast("Enter a department name.");
+    return;
+  }
+
+  function finishUpdate(imageData) {
+    const previous = c.status;
+    const now = new Date().toISOString();
+
+    c.status = newStatus;
+    c.department = newDepartment;
+    c.updatedAt = now;
+
+    if (imageData) c.resolutionProof = imageData;
+
+    if (previous !== newStatus) {
+      c.history.push({ status: newStatus, date: now });
+    }
+
+    if (!saveComplaints()) return;
+
+    toast("Complaint updated: " + c.id);
+    renderAll();
+  }
+
+  if (file) {
+    if (!file.type.startsWith("image/") || file.size > 500 * 1024) {
+      toast("Choose an image smaller than 500 KB.");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => finishUpdate(reader.result);
+    reader.readAsDataURL(file);
+  } else {
+    finishUpdate("");
+  }
+}
+
+// Save feedback
+function saveFeedback(id) {
+  const c = complaints.find(item => item.id === id);
+  const field = document.getElementById("feedback-" + id);
+
+  if (!c || !field) return;
+
+  c.feedback = field.value.trim();
+  c.updatedAt = new Date().toISOString();
+
+  if (saveComplaints()) {
+    toast("Feedback saved.");
+    renderAll();
+  }
+}
+
+// Analytics
+function renderAnalytics() {
+  const categories = {};
+
+  complaints.forEach(c => {
+    categories[c.category] = (categories[c.category] || 0) + 1;
+  });
+
+  const entries = Object.entries(categories).sort((a, b) => b[1] - a[1]);
+  const max = Math.max(1, ...entries.map(e => e[1]));
+
+  const bars = entries.map(([name, count]) => `
+    <div class="bar-row">
+      <div class="bar-label">
+        <span>${escapeHTML(name)}</span><b>${count}</b>
+      </div>
+      <div class="bar">
+        <div class="bar-fill" style="width:${count / max * 100}%"></div>
+      </div>
+    </div>`).join("");
+
+  const statusSummary = STATUSES.map(s =>
+    '<p>' + escapeHTML(s) + ': <b>' +
+    complaints.filter(c => c.status === s).length + '</b></p>'
+  ).join("");
+
+  document.getElementById("analyticsContent").innerHTML = `
+    <h3>Complaints by category</h3>
+    ${bars || '<p class="empty">Submit complaints to see analytics.</p>'}
+    <hr>
+    <h3>Status summary</h3>
+    ${statusSummary}
+    <hr>
+    <p>Unique affected locations: <b>${
+      new Set(complaints.map(c => c.location.toLowerCase())).size
+    }</b></p>`;
+}
+
+// CSV export
+function csvEscape(value) {
+  return '"' + String(value ?? "").replace(/"/g, '""') + '"';
+}
+
+function exportCSV() {
+  const columns = [
+    "id", "studentId", "category", "location", "title",
+    "description", "priority", "status", "department",
+    "createdAt", "updatedAt", "feedback"
+  ];
+
+  const rows = [columns.join(",")].concat(
+    complaints.map(c => columns.map(key => csvEscape(c[key])).join(","))
+  );
+
+  const blob = new Blob(["\uFEFF" + rows.join("\r\n")], {
+    type: "text/csv;charset=utf-8;"
+  });
+
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "campuscare-reports.csv";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function exportOne(id) {
+  const c = complaints.find(item => item.id === id);
+  if (!c) return;
+
+  const blob = new Blob([JSON.stringify(c, null, 2)], {
+    type: "application/json"
+  });
+
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = id + ".json";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function renderAll() {
+  renderHome();
+  renderComplaints();
+  renderAdmin();
+  renderAnalytics();
+}
+
+renderAll();
+</script>
+
+</body>
+</html>
