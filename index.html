@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CampusCare | Report Track Resolve</title>
+<title>CampusCare | Campus Problem Reporting</title>
 
 <style>
 :root {
@@ -13,7 +13,8 @@
   --bg: #f5f8f7;
   --text: #20332c;
   --muted: #718078;
-  --border: #dce8e1;
+  --border: #e0e9e3;
+  --red: #bd2929;
 }
 
 * {
@@ -22,80 +23,21 @@
 
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
   background: var(--bg);
   color: var(--text);
 }
 
-header {
-  background: white;
-  padding: 20px;
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  border-bottom: 1px solid var(--border);
-}
-
-.logo {
-  background: var(--green);
-  color: white;
-  padding: 18px;
-  border-radius: 20px;
-  font-size: 28px;
-}
-
-header h1 {
-  margin: 0;
-}
-
-header p {
-  margin: 5px 0 0;
-  color: var(--muted);
-}
-
-.container {
-  max-width: 850px;
-  margin: 35px auto;
-  padding: 15px;
-}
-
-.card {
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: 22px;
-  padding: 25px;
-  margin-bottom: 20px;
-}
-
-h2 {
-  margin-top: 0;
-}
-
-input, select, textarea {
-  width: 100%;
-  padding: 14px;
-  margin: 8px 0 15px;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  font-size: 16px;
-}
-
-textarea {
-  min-height: 100px;
-  resize: vertical;
-}
-
-label {
-  font-weight: bold;
+button, input, select, textarea {
+  font: inherit;
 }
 
 button {
-  border: none;
-  padding: 13px 18px;
-  border-radius: 10px;
   cursor: pointer;
-  font-size: 15px;
-  font-weight: bold;
+  border: none;
+  border-radius: 9px;
+  padding: 11px 15px;
+  font-weight: 600;
 }
 
 .primary {
@@ -109,113 +51,388 @@ button {
 }
 
 .danger {
-  background: #fee2e2;
-  color: #b91c1c;
+  background: #ffeded;
+  color: var(--red);
 }
 
-button:hover {
-  opacity: 0.9;
+.adminBtn {
+  background: #1a365d;
+  color: white;
+}
+
+header {
+  background: white;
+  border-bottom: 1px solid var(--border);
+  padding: 15px 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo {
+  background: var(--green);
+  color: white;
+  padding: 11px;
+  border-radius: 12px;
+  font-size: 23px;
+}
+
+.brand h2 {
+  margin: 0;
+  font-size: 21px;
+}
+
+.brand small {
+  color: var(--muted);
+}
+
+.header-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+main {
+  max-width: 1200px;
+  margin: auto;
+  padding: 25px 5%;
+}
+
+.hero {
+  padding: 30px;
+  border-radius: 20px;
+  background: linear-gradient(120deg, #155b43, #298565);
+  color: white;
+  margin-bottom: 22px;
+}
+
+.hero h1 {
+  font-size: clamp(27px, 4vw, 39px);
+  margin: 0 0 12px;
+}
+
+.hero p {
+  line-height: 1.7;
+  max-width: 650px;
+}
+
+.tag {
+  display: inline-block;
+  background: #ffffff20;
+  padding: 7px 12px;
+  border-radius: 30px;
+  font-size: 12px;
+  margin-bottom: 14px;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.stat, .panel, .complaint {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+}
+
+.stat {
+  padding: 19px;
+}
+
+.stat .number {
+  font-size: 29px;
+  font-weight: 700;
+  margin: 8px 0;
+}
+
+.stat small, .muted {
+  color: var(--muted);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1.1fr .9fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.panel {
+  padding: 22px;
+  margin-bottom: 20px;
+}
+
+.panel h2 {
+  margin-top: 0;
+  font-size: 21px;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  font-size: 13px;
+  margin: 15px 0 7px;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d8e3dc;
+  border-radius: 9px;
+  background: white;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 95px;
+}
+
+.hint {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+
+.notice {
+  background: #fff7df;
+  color: #795914;
+  padding: 12px;
+  border-radius: 9px;
+  font-size: 13px;
+  margin: 12px 0;
+}
+
+.warn {
+  background: #ffeded;
+  color: var(--red);
+  padding: 12px;
+  border-radius: 9px;
+  font-size: 13px;
+  margin: 12px 0;
 }
 
 .tabs {
   display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
+  gap: 7px;
   margin-bottom: 20px;
+  overflow-x: auto;
 }
 
-.tabs button {
+.tab {
   background: white;
+  border: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.tab.active {
+  background: var(--green);
+  color: white;
+}
+
+.tab.adminTab.active {
+  background: #1a365d;
+}
+
+.page {
+  display: none;
+}
+
+.page.active {
+  display: block;
+}
+
+.complaint {
+  padding: 17px;
+  margin-bottom: 12px;
+}
+
+.complaint-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.complaint h3 {
+  font-size: 16px;
+  margin: 8px 0;
+}
+
+.complaint p {
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.badge {
+  display: inline-block;
+  padding: 6px 9px;
+  border-radius: 30px;
+  font-size: 11px;
+  font-weight: 700;
+  background: #edf1ef;
+}
+
+.submitted {
+  background: #e7efff;
+  color: #2854a4;
+}
+
+.under-review {
+  background: #fff0d6;
+  color: #8c5a00;
+}
+
+.in-progress {
+  background: #e7e3ff;
+  color: #5c42a4;
+}
+
+.resolved {
+  background: #ddf5e4;
+  color: #176b4d;
+}
+
+.rejected {
+  background: #ffeded;
+  color: #bd2929;
+}
+
+.High {
+  background: #fff0d6;
+  color: #8c5a00;
+}
+
+.Medium {
+  background: #e7efff;
+  color: #2854a4;
+}
+
+.Low {
+  background: #edf1ef;
+  color: #555;
+}
+
+.complaint img,
+.complaint video {
+  max-width: 100%;
+  max-height: 300px;
+  border-radius: 10px;
+  display: block;
+  margin-top: 10px;
+}
+
+.preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.preview-item {
+  width: 120px;
+  position: relative;
+}
+
+.preview-item img,
+.preview-item video {
+  width: 120px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 9px;
   border: 1px solid var(--border);
 }
 
-.tabs button.active {
-  background: var(--green);
+.remove-file {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  padding: 4px 7px;
+  background: #bd2929;
   color: white;
+  border-radius: 50%;
+}
+
+.admin-controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.admin-controls textarea {
+  grid-column: 1 / -1;
 }
 
 .hidden {
   display: none !important;
 }
 
-.complaint {
-  border: 1px solid var(--border);
-  padding: 18px;
-  border-radius: 14px;
-  margin: 15px 0;
-  background: white;
-}
-
-.complaint h3 {
-  margin: 0 0 8px;
-}
-
-.status {
-  display: inline-block;
-  padding: 6px 10px;
-  border-radius: 20px;
-  background: #fff4cc;
-  color: #8a6500;
-  font-size: 13px;
-  font-weight: bold;
-}
-
-.status.Resolved {
-  background: #dcfce7;
-  color: #166534;
-}
-
-.status["In Progress"] {
-  background: #dbeafe;
-  color: #1d4ed8;
-}
-
-.small {
-  color: var(--muted);
+.message {
+  color: var(--green);
+  min-height: 1.4em;
   font-size: 14px;
 }
 
-footer {
-  text-align: center;
+.error {
+  color: var(--red);
+}
+
+.empty {
   padding: 25px;
-  color: var(--muted);
-}
-
-.message {
-  color: #b91c1c;
-  margin: 10px 0;
-}
-
-.stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin-bottom: 20px;
-}
-
-.stat {
-  background: var(--light);
-  padding: 15px;
-  border-radius: 12px;
   text-align: center;
+  color: var(--muted);
+  background: white;
+  border-radius: 12px;
 }
 
-.stat h2 {
-  margin: 0;
-  color: var(--green);
+.emergency {
+  background: #ffeded;
+  color: #bd2929;
 }
 
-@media(max-width: 600px) {
-  .container {
-    margin: 15px auto;
+@media(max-width:800px) {
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
   }
 
-  .card {
-    padding: 20px;
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media(max-width:450px) {
+  main {
+    padding: 18px 4%;
+  }
+
+  .hero {
+    padding: 22px;
+  }
+
+  .panel {
+    padding: 16px;
   }
 
   .stats {
-    grid-template-columns: 1fr;
+    gap: 9px;
+  }
+
+  .stat {
+    padding: 13px;
+  }
+
+  .stat .number {
+    font-size: 24px;
   }
 }
 </style>
@@ -224,636 +441,1187 @@ footer {
 <body>
 
 <header>
-  <div class="logo">🎓</div>
-  <div>
-    <h1>CampusCare</h1>
-    <p>Report • Track • Resolve</p>
+  <div class="brand">
+    <div class="logo">🏫</div>
+    <div>
+      <h2>CampusCare</h2>
+      <small>Campus Problem Reporting</small>
+    </div>
+  </div>
+
+  <div class="header-actions">
+    <button class="secondary" id="loginBtn">Login</button>
+    <button class="danger" id="logoutBtn" hidden>Logout</button>
+    <button class="adminBtn" id="adminLoginBtn">Admin</button>
   </div>
 </header>
 
-<div class="container">
+<main>
 
-<!-- LOGIN SECTION -->
-<section id="authSection" class="card">
+<section class="hero">
+  <span class="tag">A Better Campus Starts Here</span>
+  <h1>Report. Resolve. Improve.</h1>
+  <p>
+    Help make your campus safer, cleaner, and better.
+    Report maintenance issues, upload photos or videos,
+    and track the progress of your complaint.
+  </p>
+</section>
 
-<h2>Welcome to CampusCare</h2>
+<section class="stats">
+  <div class="stat">
+    <small>Total Complaints</small>
+    <div class="number" id="totalCount">0</div>
+  </div>
 
-<p class="small">
-Single platform for students to report, track and get updates
-on campus problems.
-</p>
+  <div class="stat">
+    <small>Pending</small>
+    <div class="number" id="pendingCount">0</div>
+  </div>
+
+  <div class="stat">
+    <small>In Progress</small>
+    <div class="number" id="progressCount">0</div>
+  </div>
+
+  <div class="stat">
+    <small>Resolved</small>
+    <div class="number" id="resolvedCount">0</div>
+  </div>
+</section>
 
 <div class="tabs">
-  <button class="active" onclick="showAuth('student',this)">
-    Student Login
-  </button>
-
-  <button onclick="showAuth('admin',this)">
-    🔐 Admin Login
-  </button>
-
-  <button onclick="showAuth('register',this)">
-    Register
+  <button class="tab active" data-page="home">Home</button>
+  <button class="tab" data-page="report">Report Problem</button>
+  <button class="tab" data-page="complaints">My Complaints</button>
+  <button class="tab adminTab hidden" data-page="admin" id="adminTab">
+    Admin Dashboard
   </button>
 </div>
 
-<form id="loginForm">
+<!-- HOME PAGE -->
 
-<div id="nameField" class="hidden">
-  <label>Full Name</label>
-  <input id="studentName" placeholder="Enter your name">
+<section class="page active" id="home">
+  <div class="panel">
+    <h2>Welcome to CampusCare 👋</h2>
+    <p>
+      Have you noticed a problem on your campus?
+      Report it here and help the college administration
+      take action.
+    </p>
+
+    <button class="primary" onclick="showPage('report')">
+      Report a Problem
+    </button>
+  </div>
+
+  <div class="panel">
+    <h2>Common Campus Problems</h2>
+
+    <div class="notice">
+      💡 Electrical problems, water leakage, broken furniture,
+      damaged roads, sanitation issues, and other campus problems
+      can be reported.
+    </div>
+
+    <button class="secondary" onclick="showPage('complaints')">
+      Track My Complaints
+    </button>
+  </div>
+</section>
+
+<!-- REPORT PAGE -->
+
+<section class="page" id="report">
+
+<div class="layout">
+
+<div class="panel">
+
+<h2>Report a Campus Problem</h2>
+
+<div id="loginNotice" class="notice">
+  Please login before submitting a complaint.
 </div>
 
-<label>Email</label>
-<input id="email" type="email"
-placeholder="Enter your college email" required>
+<form id="complaintForm">
 
-<label>Password</label>
-<input id="password" type="password"
-placeholder="Enter password" required>
+<label for="title">Problem Title</label>
+<input
+  id="title"
+  required
+  maxlength="100"
+  placeholder="Example: Broken classroom fan"
+>
 
-<button class="primary" type="submit" id="loginButton"
-style="width:100%">
-Login as Student
+<label for="category">Problem Category</label>
+<select id="category" required>
+  <option value="">Select Category</option>
+  <option>Electrical</option>
+  <option>Water Supply</option>
+  <option>Cleanliness</option>
+  <option>Infrastructure</option>
+  <option>Classroom</option>
+  <option>Hostel</option>
+  <option>Washroom</option>
+  <option>Internet / Wi-Fi</option>
+  <option>Safety</option>
+  <option>Other</option>
+</select>
+
+<label for="location">Problem Location</label>
+<input
+  id="location"
+  required
+  maxlength="150"
+  placeholder="Example: Block A, Room 203"
+>
+
+<label for="priority">Priority</label>
+<select id="priority" required>
+  <option value="Low">Low</option>
+  <option value="Medium" selected>Medium</option>
+  <option value="High">High</option>
+</select>
+
+<label for="description">Description</label>
+<textarea
+  id="description"
+  required
+  maxlength="2000"
+  placeholder="Describe the problem..."
+></textarea>
+
+<label for="media">Upload Photos or Videos</label>
+
+<input
+  type="file"
+  id="media"
+  accept="image/*,video/*"
+  multiple
+>
+
+<div class="hint">
+  Upload up to 5 photos or videos. Maximum 20 MB per file.
+</div>
+
+<div id="preview" class="preview"></div>
+
+<div class="notice">
+  Your personal complaint ID will be stored privately.
+  It will not be displayed on the complaint cards.
+</div>
+
+<button type="submit" class="primary" id="submitBtn">
+  Submit Complaint
 </button>
 
-<p id="authMessage" class="message"></p>
+<p id="formMessage" class="message"></p>
 
 </form>
+</div>
 
-<p class="small" id="authHint">
-Student can report issues, view complaints and history.
-</p>
+<div class="panel">
 
+<h2>Reporting Guidelines</h2>
+
+<p>✔ Provide an accurate location.</p>
+<p>✔ Explain the problem clearly.</p>
+<p>✔ Upload relevant photos or videos.</p>
+<p>✔ Select the appropriate priority.</p>
+<p>✔ Do not upload private or sensitive information.</p>
+
+<div class="notice">
+  For immediate danger, contact campus security
+  or the appropriate emergency service directly.
+  CampusCare is not an emergency response service.
+</div>
+
+</div>
+</div>
 </section>
 
-<!-- STUDENT DASHBOARD -->
-<section id="studentSection" class="hidden">
+<!-- COMPLAINTS PAGE -->
 
-<div class="card">
-  <h2 id="welcomeText">Student Dashboard</h2>
+<section class="page" id="complaints">
 
-  <p class="small">
-  Report campus problems and track their resolution.
+<div class="panel">
+  <h2>My Complaints</h2>
+
+  <p class="muted">
+    Track the status of your submitted complaints.
   </p>
 
-  <button class="secondary" onclick="logout()">Logout</button>
-</div>
-
-<div class="card">
-  <h2>Report a Campus Issue</h2>
-
-  <form id="complaintForm">
-
-  <label>Issue Title</label>
-  <input id="issueTitle" placeholder="Example: Water problem"
-  required>
-
-  <label>Category</label>
-  <select id="category" required>
-    <option value="">Select category</option>
-    <option>Water</option>
-    <option>Electricity</option>
-    <option>Classroom</option>
-    <option>Hostel</option>
-    <option>Cleanliness</option>
-    <option>Internet</option>
-    <option>Other</option>
-  </select>
-
-  <label>Location</label>
-  <input id="location" placeholder="Building / Room number"
-  required>
-
-  <label>Description</label>
-  <textarea id="description"
-  placeholder="Describe the problem..."
-  required></textarea>
-
-  <button class="primary" type="submit">
-    Submit Complaint
-  </button>
-
-  </form>
-</div>
-
-<div class="card">
-  <h2>My Complaints</h2>
-  <div id="myComplaints"></div>
+  <div id="myComplaints">
+    <div class="empty">Login to view your complaints.</div>
+  </div>
 </div>
 
 </section>
 
-<!-- ADMIN DASHBOARD -->
-<section id="adminSection" class="hidden">
+<!-- ADMIN PAGE -->
 
-<div class="card">
-  <h2>Admin Dashboard 🔐</h2>
-  <p class="small">Manage student complaints.</p>
+<section class="page" id="admin">
 
-  <button class="secondary" onclick="logout()">Logout</button>
-</div>
+<div class="panel">
+  <h2>Admin Dashboard</h2>
 
-<div class="stats">
-  <div class="stat">
-    <h2 id="totalCount">0</h2>
-    <p>Total Issues</p>
+  <p class="muted">
+    Review campus complaints and update their status.
+  </p>
+
+  <div id="adminComplaints">
+    <div class="empty">Admin login required.</div>
   </div>
-
-  <div class="stat">
-    <h2 id="pendingCount">0</h2>
-    <p>Pending</p>
-  </div>
-
-  <div class="stat">
-    <h2 id="resolvedCount">0</h2>
-    <p>Resolved</p>
-  </div>
-</div>
-
-<div class="card">
-  <h2>All Student Complaints</h2>
-  <div id="allComplaints"></div>
 </div>
 
 </section>
 
-</div>
+</main>
 
-<footer>
-CampusCare · Transparency between Students & Authorities
-<br>
-Centralized Complaint Database
-</footer>
+<!-- FIREBASE -->
 
-<script>
+<script type="module">
 
-// =================================
-// CAMPUSCARE - NO FIREBASE
-// =================================
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-let currentMode = "student";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  where,
+  orderBy,
+  updateDoc,
+  doc,
+  serverTimestamp
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+
+/* =====================================
+   1. FIREBASE CONFIGURATION
+===================================== */
+
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT.firebasestorage.app",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+
+/*
+  IMPORTANT:
+  Replace the above values with your Firebase
+  project's actual configuration.
+*/
+
+/* =====================================
+   2. ADMIN CONFIGURATION
+===================================== */
+
+const ADMIN_EMAILS = [
+  "admin@yourcollege.edu"
+];
+
+/*
+  Replace this email with your actual admin email.
+
+  This frontend check controls the interface only.
+  Firestore and Storage security rules must also
+  enforce admin permissions.
+*/
+
+/* =====================================
+   3. INITIALIZE FIREBASE
+===================================== */
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const storage = getStorage(app);
+
 let currentUser = null;
+let isAdmin = false;
+let selectedFiles = [];
 
-let users = JSON.parse(
-  localStorage.getItem("campuscare_users") || "[]"
-);
+const $ = id => document.getElementById(id);
 
-let complaints = JSON.parse(
-  localStorage.getItem("campuscare_complaints") || "[]"
-);
+const form = $("complaintForm");
+const mediaInput = $("media");
+const preview = $("preview");
 
-// Save data in browser
-function saveData() {
-  localStorage.setItem(
-    "campuscare_users",
-    JSON.stringify(users)
+/* =====================================
+   4. NAVIGATION
+===================================== */
+
+window.showPage = function(page) {
+
+  document.querySelectorAll(".page").forEach(p => {
+    p.classList.remove("active");
+  });
+
+  document.querySelectorAll(".tab").forEach(t => {
+    t.classList.remove("active");
+  });
+
+  $(page).classList.add("active");
+
+  const tab = document.querySelector(
+    `[data-page="${page}"]`
   );
 
-  localStorage.setItem(
-    "campuscare_complaints",
-    JSON.stringify(complaints)
-  );
-}
+  if (tab) tab.classList.add("active");
+};
 
-// Switch login tabs
-function showAuth(mode, button) {
-  currentMode = mode;
+document.querySelectorAll(".tab").forEach(tab => {
 
-  document.querySelectorAll(".tabs button")
-    .forEach(btn => btn.classList.remove("active"));
+  tab.addEventListener("click", () => {
 
-  button.classList.add("active");
+    const page = tab.dataset.page;
 
-  document.getElementById("nameField")
-    .classList.toggle("hidden", mode !== "register");
-
-  document.getElementById("authMessage").textContent = "";
-
-  if (mode === "student") {
-    document.getElementById("loginButton").textContent =
-      "Login as Student";
-
-    document.getElementById("authHint").textContent =
-      "Student can report issues, view complaints and history.";
-  }
-
-  if (mode === "admin") {
-    document.getElementById("loginButton").textContent =
-      "Login as Admin";
-
-    document.getElementById("authHint").textContent =
-      "Demo Admin: admin@campuscare.demo | Password: admin123";
-  }
-
-  if (mode === "register") {
-    document.getElementById("loginButton").textContent =
-      "Create Student Account";
-
-    document.getElementById("authHint").textContent =
-      "Register with your name, email and password.";
-  }
-}
-
-// Login / Registration
-document.getElementById("loginForm")
-.addEventListener("submit", function(e) {
-
-  e.preventDefault();
-
-  const email = document.getElementById("email")
-    .value.trim().toLowerCase();
-
-  const password = document.getElementById("password")
-    .value;
-
-  const name = document.getElementById("studentName")
-    .value.trim();
-
-  const message = document.getElementById("authMessage");
-
-  // ADMIN LOGIN
-  if (currentMode === "admin") {
-
-    if (
-      email === "admin@campuscare.demo" &&
-      password === "admin123"
-    ) {
-      currentUser = {
-        email: email,
-        name: "Administrator",
-        role: "admin"
-      };
-
-      openDashboard("admin");
-    } else {
-      message.textContent = "Invalid admin email or password.";
+    if (page === "admin" && !isAdmin) {
+      alert("Admin access required.");
+      return;
     }
 
+    showPage(page);
+
+  });
+
+});
+
+/* =====================================
+   5. LOGIN AND REGISTRATION
+===================================== */
+
+$("loginBtn").addEventListener("click", async () => {
+
+  if (currentUser) {
+    showPage("complaints");
     return;
   }
 
-  // STUDENT REGISTRATION
-  if (currentMode === "register") {
+  const email = prompt("Enter your email:");
 
-    if (!name) {
-      message.textContent = "Please enter your name.";
-      return;
-    }
+  if (!email) return;
 
-    const exists = users.some(user => user.email === email);
+  const password = prompt("Enter your password:");
 
-    if (exists) {
-      message.textContent = "Email already registered.";
-      return;
-    }
+  if (!password) return;
 
-    users.push({
-      name: name,
-      email: email,
-      password: password,
-      role: "student"
-    });
+  try {
 
-    saveData();
-
-    message.style.color = "green";
-    message.textContent =
-      "Registration successful! Please login.";
-
-    showAuth(
-      "student",
-      document.querySelector(".tabs button")
+    await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
     );
 
+    alert("Login successful!");
+
+  } catch (error) {
+
+    if (error.code === "auth/user-not-found") {
+
+      const create = confirm(
+        "Account not found. Create a new account?"
+      );
+
+      if (create) {
+
+        try {
+
+          await createUserWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
+
+          alert("Account created successfully!");
+
+        } catch (e) {
+          alert(e.message);
+        }
+
+      }
+
+    } else {
+
+      alert(error.message);
+
+    }
+
+  }
+
+});
+
+/* =====================================
+   6. ADMIN LOGIN
+===================================== */
+
+$("adminLoginBtn").addEventListener("click", async () => {
+
+  if (isAdmin) {
+    showPage("admin");
     return;
   }
 
-  // STUDENT LOGIN
-  const user = users.find(
-    user =>
-      user.email === email &&
-      user.password === password
+  const email = prompt("Enter admin email:");
+
+  if (!email) return;
+
+  const password = prompt("Enter admin password:");
+
+  if (!password) return;
+
+  try {
+
+    await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+
+    if (!ADMIN_EMAILS.includes(email.toLowerCase())) {
+
+      alert("This account is not an authorized admin.");
+
+      await signOut(auth);
+
+      return;
+    }
+
+    alert("Admin login successful!");
+
+  } catch (error) {
+
+    alert(error.message);
+
+  }
+
+});
+
+/* =====================================
+   7. LOGOUT
+===================================== */
+
+$("logoutBtn").addEventListener("click", async () => {
+
+  await signOut(auth);
+
+  alert("Logged out successfully.");
+
+});
+
+/* =====================================
+   8. AUTHENTICATION STATE
+===================================== */
+
+onAuthStateChanged(auth, async user => {
+
+  currentUser = user;
+
+  isAdmin = !!user &&
+    ADMIN_EMAILS.includes(user.email.toLowerCase());
+
+  $("loginBtn").hidden = !!user;
+  $("logoutBtn").hidden = !user;
+
+  $("adminTab").classList.toggle(
+    "hidden",
+    !isAdmin
+  );
+
+  $("adminLoginBtn").textContent =
+    isAdmin ? "Admin Dashboard" : "Admin";
+
+  $("loginNotice").classList.toggle(
+    "hidden",
+    !!user
   );
 
   if (user) {
 
-    currentUser = user;
+    await loadMyComplaints();
 
-    openDashboard("student");
+    if (isAdmin) {
+      await loadAdminComplaints();
+    }
 
   } else {
 
-    message.textContent =
-      "Invalid login. Please register first.";
+    $("myComplaints").innerHTML =
+      '<div class="empty">Login to view your complaints.</div>';
+
+    $("adminComplaints").innerHTML =
+      '<div class="empty">Admin login required.</div>';
 
   }
 
 });
 
-// Open dashboard
-function openDashboard(role) {
+/* =====================================
+   9. FILE VALIDATION
+===================================== */
 
-  document.getElementById("authSection")
-    .classList.add("hidden");
+mediaInput.addEventListener("change", () => {
 
-  document.getElementById("studentSection")
-    .classList.add("hidden");
+  selectedFiles = Array.from(mediaInput.files);
 
-  document.getElementById("adminSection")
-    .classList.add("hidden");
+  preview.innerHTML = "";
 
-  if (role === "student") {
+  if (selectedFiles.length > 5) {
 
-    document.getElementById("studentSection")
-      .classList.remove("hidden");
+    alert("You can upload a maximum of 5 files.");
 
-    document.getElementById("welcomeText").textContent =
-      "Welcome, " + currentUser.name + "!";
+    selectedFiles = [];
+    mediaInput.value = "";
 
-    renderMyComplaints();
+    return;
+  }
 
-  } else {
+  for (const file of selectedFiles) {
 
-    document.getElementById("adminSection")
-      .classList.remove("hidden");
+    if (file.size > 20 * 1024 * 1024) {
 
-    renderAllComplaints();
+      alert("Each file must be below 20 MB.");
+
+      selectedFiles = [];
+      mediaInput.value = "";
+      preview.innerHTML = "";
+
+      return;
+    }
+
+    if (
+      !file.type.startsWith("image/") &&
+      !file.type.startsWith("video/")
+    ) {
+
+      alert("Only images and videos are allowed.");
+
+      selectedFiles = [];
+      mediaInput.value = "";
+      preview.innerHTML = "";
+
+      return;
+    }
 
   }
 
-}
-
-// Logout
-function logout() {
-
-  currentUser = null;
-
-  document.getElementById("authSection")
-    .classList.remove("hidden");
-
-  document.getElementById("studentSection")
-    .classList.add("hidden");
-
-  document.getElementById("adminSection")
-    .classList.add("hidden");
-
-  document.getElementById("loginForm").reset();
-
-  showAuth(
-    "student",
-    document.querySelector(".tabs button")
-  );
-
-}
-
-// Submit complaint
-document.getElementById("complaintForm")
-.addEventListener("submit", function(e) {
-
-  e.preventDefault();
-
-  const complaint = {
-
-    id: "CC" + Date.now(),
-
-    studentName: currentUser.name,
-
-    studentEmail: currentUser.email,
-
-    title: document.getElementById("issueTitle").value,
-
-    category: document.getElementById("category").value,
-
-    location: document.getElementById("location").value,
-
-    description:
-      document.getElementById("description").value,
-
-    status: "Pending",
-
-    date: new Date().toLocaleString()
-
-  };
-
-  complaints.unshift(complaint);
-
-  saveData();
-
-  this.reset();
-
-  alert("Complaint submitted successfully!");
-
-  renderMyComplaints();
+  renderPreview();
 
 });
 
-// Display student complaints
-function renderMyComplaints() {
+function renderPreview() {
 
-  const container = document.getElementById("myComplaints");
+  preview.innerHTML = "";
 
-  const myItems = complaints.filter(
-    complaint =>
-      complaint.studentEmail === currentUser.email
-  );
+  selectedFiles.forEach((file, index) => {
 
-  if (myItems.length === 0) {
+    const item = document.createElement("div");
 
-    container.innerHTML =
-      "<p class='small'>No complaints submitted yet.</p>";
+    item.className = "preview-item";
 
-    return;
+    const url = URL.createObjectURL(file);
 
-  }
+    let element;
 
-  container.innerHTML = myItems.map(complaint => `
+    if (file.type.startsWith("image/")) {
 
-    <div class="complaint">
+      element = document.createElement("img");
 
-      <h3>${escapeHTML(complaint.title)}</h3>
+    } else {
 
-      <p>
-        <b>Complaint ID:</b>
-        ${escapeHTML(complaint.id)}
-      </p>
+      element = document.createElement("video");
 
-      <p>
-        <b>Category:</b>
-        ${escapeHTML(complaint.category)}
-      </p>
+      element.controls = true;
 
-      <p>
-        <b>Location:</b>
-        ${escapeHTML(complaint.location)}
-      </p>
+    }
 
-      <p>
-        ${escapeHTML(complaint.description)}
-      </p>
+    element.src = url;
 
-      <span class="status ${complaint.status}">
-        ${escapeHTML(complaint.status)}
-      </span>
+    const removeBtn = document.createElement("button");
 
-      <p class="small">
-        Submitted: ${escapeHTML(complaint.date)}
-      </p>
+    removeBtn.textContent = "×";
+    removeBtn.className = "remove-file";
+    removeBtn.type = "button";
 
-    </div>
+    removeBtn.onclick = () => {
 
-  `).join("");
+      selectedFiles.splice(index, 1);
 
-}
+      const dt = new DataTransfer();
 
-// Display all complaints for admin
-function renderAllComplaints() {
+      selectedFiles.forEach(file => dt.items.add(file));
 
-  const container = document.getElementById("allComplaints");
+      mediaInput.files = dt.files;
 
-  document.getElementById("totalCount").textContent =
-    complaints.length;
+      renderPreview();
 
-  document.getElementById("pendingCount").textContent =
-    complaints.filter(c => c.status === "Pending").length;
+    };
 
-  document.getElementById("resolvedCount").textContent =
-    complaints.filter(c => c.status === "Resolved").length;
+    item.appendChild(element);
+    item.appendChild(removeBtn);
 
-  if (complaints.length === 0) {
+    preview.appendChild(item);
 
-    container.innerHTML =
-      "<p class='small'>No complaints received yet.</p>";
-
-    return;
-
-  }
-
-  container.innerHTML = complaints.map(complaint => `
-
-    <div class="complaint">
-
-      <h3>${escapeHTML(complaint.title)}</h3>
-
-      <p>
-        <b>Complaint ID:</b>
-        ${escapeHTML(complaint.id)}
-      </p>
-
-      <p>
-        <b>Student:</b>
-        ${escapeHTML(complaint.studentName)}
-      </p>
-
-      <p>
-        <b>Email:</b>
-        ${escapeHTML(complaint.studentEmail)}
-      </p>
-
-      <p>
-        <b>Category:</b>
-        ${escapeHTML(complaint.category)}
-      </p>
-
-      <p>
-        <b>Location:</b>
-        ${escapeHTML(complaint.location)}
-      </p>
-
-      <p>
-        ${escapeHTML(complaint.description)}
-      </p>
-
-      <p>
-        <span class="status ${complaint.status}">
-          ${escapeHTML(complaint.status)}
-        </span>
-      </p>
-
-      <label>Update Status</label>
-
-      <select onchange="updateStatus('${complaint.id}',this.value)">
-
-        <option ${complaint.status === "Pending" ? "selected" : ""}
-        value="Pending">
-          Pending
-        </option>
-
-        <option ${complaint.status === "In Progress" ? "selected" : ""}
-        value="In Progress">
-          In Progress
-        </option>
-
-        <option ${complaint.status === "Resolved" ? "selected" : ""}
-        value="Resolved">
-          Resolved
-        </option>
-
-      </select>
-
-      <button class="danger"
-      onclick="deleteComplaint('${complaint.id}')">
-        Delete Complaint
-      </button>
-
-      <p class="small">
-        Submitted: ${escapeHTML(complaint.date)}
-      </p>
-
-    </div>
-
-  `).join("");
+  });
 
 }
 
-// Update complaint status
-function updateStatus(id, status) {
+/* =====================================
+   10. UPLOAD MEDIA TO FIREBASE STORAGE
+===================================== */
 
-  const complaint = complaints.find(c => c.id === id);
+async function uploadMedia(files, complaintId) {
 
-  if (complaint) {
+  const urls = [];
 
-    complaint.status = status;
+  for (const file of files) {
 
-    saveData();
+    const safeName = file.name.replace(
+      /[^a-zA-Z0-9._-]/g,
+      "_"
+    );
 
-    renderAllComplaints();
+    const filePath =
+      `complaints/${complaintId}/${Date.now()}_${safeName}`;
+
+    const storageRef = ref(storage, filePath);
+
+    await uploadBytes(storageRef, file, {
+      contentType: file.type
+    });
+
+    const downloadURL =
+      await getDownloadURL(storageRef);
+
+    urls.push({
+      url: downloadURL,
+      type: file.type.startsWith("image/")
+        ? "image"
+        : "video"
+    });
 
   }
 
+  return urls;
+
 }
 
-// Delete complaint
-function deleteComplaint(id) {
+/* =====================================
+   11. SUBMIT COMPLAINT
+===================================== */
 
-  if (!confirm("Delete this complaint?")) {
+form.addEventListener("submit", async event => {
+
+  event.preventDefault();
+
+  if (!currentUser) {
+
+    alert("Please login before submitting a complaint.");
+
     return;
   }
 
-  complaints = complaints.filter(c => c.id !== id);
+  if (selectedFiles.length > 5) {
 
-  saveData();
+    alert("Maximum 5 files allowed.");
 
-  renderAllComplaints();
+    return;
+  }
 
-}
+  $("submitBtn").disabled = true;
 
-// Prevent HTML injection in displayed text
+  $("formMessage").textContent =
+    "Submitting your complaint...";
+
+  try {
+
+    /*
+      Complaint document is created first.
+      Its ID is never displayed in the user interface.
+    */
+
+    const complaintData = {
+
+      userId: currentUser.uid,
+
+      userEmail: currentUser.email,
+
+      title: $("title").value.trim(),
+
+      category: $("category").value,
+
+      location: $("location").value.trim(),
+
+      priority: $("priority").value,
+
+      description: $("description").value.trim(),
+
+      status: "Submitted",
+
+      adminNote: "",
+
+      media: [],
+
+      createdAt: serverTimestamp()
+
+    };
+
+    const complaintRef = await addDoc(
+      collection(db, "complaints"),
+      complaintData
+    );
+
+    const uploadedMedia = await uploadMedia(
+      selectedFiles,
+      complaintRef.id
+    );
+
+    await updateDoc(
+      doc(db, "complaints", complaintRef.id),
+      {
+        media: uploadedMedia
+      }
+    );
+
+    $("formMessage").textContent =
+      "Complaint submitted successfully!";
+
+    $("formMessage").className = "message";
+
+    form.reset();
+
+    selectedFiles = [];
+
+    preview.innerHTML = "";
+
+    await loadMyComplaints();
+
+    await loadStats();
+
+    if (isAdmin) {
+      await loadAdminComplaints();
+    }
+
+    showPage("complaints");
+
+  } catch (error) {
+
+    console.error(error);
+
+    $("formMessage").textContent =
+      "Submission failed: " + error.message;
+
+    $("formMessage").className = "message error";
+
+  } finally {
+
+    $("submitBtn").disabled = false;
+
+  }
+
+});
+
+/* =====================================
+   12. SAFE HTML HELPERS
+===================================== */
+
 function escapeHTML(value) {
 
-  return String(value).replace(/[&<>"']/g, function(char) {
-
-    return {
+  return String(value ?? "").replace(
+    /[&<>"']/g,
+    char => ({
       "&": "&amp;",
       "<": "&lt;",
       ">": "&gt;",
       '"': "&quot;",
       "'": "&#39;"
-    }[char];
-
-  });
+    }[char])
+  );
 
 }
+
+function formatDate(timestamp) {
+
+  if (!timestamp) return "Recently";
+
+  return timestamp.toDate().toLocaleString();
+
+}
+
+function statusClass(status) {
+
+  return String(status)
+    .toLowerCase()
+    .replace(/\s+/g, "-");
+
+}
+
+/* =====================================
+   13. MEDIA DISPLAY
+===================================== */
+
+function mediaHTML(media) {
+
+  if (!Array.isArray(media)) return "";
+
+  return media.map(item => {
+
+    const url = escapeHTML(item.url);
+
+    if (item.type === "image") {
+
+      return `
+        <a href="${url}" target="_blank" rel="noopener">
+          <img src="${url}" alt="Complaint photo">
+        </a>
+      `;
+
+    }
+
+    if (item.type === "video") {
+
+      return `
+        <video controls preload="metadata">
+          <source src="${url}">
+          Your browser does not support video.
+        </video>
+      `;
+
+    }
+
+    return "";
+
+  }).join("");
+
+}
+
+/* =====================================
+   14. COMPLAINT CARD
+===================================== */
+
+function complaintCard(data, admin = false) {
+
+  const status = escapeHTML(data.status || "Submitted");
+
+  const priority = escapeHTML(data.priority || "Medium");
+
+  const date = escapeHTML(formatDate(data.createdAt));
+
+  return `
+
+    <div class="complaint">
+
+      <div class="complaint-top">
+
+        <span class="badge ${statusClass(status)}">
+          ${status}
+        </span>
+
+        <span class="badge ${priority}">
+          ${priority} Priority
+        </span>
+
+      </div>
+
+      <h3>${escapeHTML(data.title)}</h3>
+
+      <p>
+        <strong>Category:</strong>
+        ${escapeHTML(data.category)}
+      </p>
+
+      <p>
+        <strong>Location:</strong>
+        ${escapeHTML(data.location)}
+      </p>
+
+      <p>
+        ${escapeHTML(data.description)}
+      </p>
+
+      ${mediaHTML(data.media)}
+
+      <p class="muted">
+        Submitted: ${date}
+      </p>
+
+      ${
+        data.adminNote
+        ? `
+          <div class="notice">
+            <strong>Admin Note:</strong>
+            ${escapeHTML(data.adminNote)}
+          </div>
+        `
+        : ""
+      }
+
+      ${
+        admin
+        ? adminControls(data)
+        : ""
+      }
+
+    </div>
+
+  `;
+
+}
+
+/*
+  Notice:
+  data.id is intentionally not displayed anywhere
+  inside complaintCard().
+*/
+
+/* =====================================
+   15. MY COMPLAINTS
+===================================== */
+
+async function loadMyComplaints() {
+
+  if (!currentUser) return;
+
+  const q = query(
+    collection(db, "complaints"),
+    where("userId", "==", currentUser.uid),
+    orderBy("createdAt", "desc")
+  );
+
+  const snapshot = await getDocs(q);
+
+  if (snapshot.empty) {
+
+    $("myComplaints").innerHTML =
+      '<div class="empty">You have not submitted any complaints yet.</div>';
+
+    return;
+
+  }
+
+  $("myComplaints").innerHTML = snapshot.docs.map(d => {
+
+    return complaintCard(d.data());
+
+  }).join("");
+
+}
+
+/* =====================================
+   16. ADMIN CONTROLS
+===================================== */
+
+function adminControls(data) {
+
+  /*
+    The document ID is used internally for admin actions.
+    It is not rendered as visible text.
+  */
+
+  const id = escapeHTML(data.id);
+
+  return `
+
+    <div class="admin-controls">
+
+      <select id="status-${id}">
+
+        <option ${data.status === "Submitted" ? "selected" : ""}>
+          Submitted
+        </option>
+
+        <option ${data.status === "Under Review" ? "selected" : ""}>
+          Under Review
+        </option>
+
+        <option ${data.status === "In Progress" ? "selected" : ""}>
+          In Progress
+        </option>
+
+        <option ${data.status === "Resolved" ? "selected" : ""}>
+          Resolved
+        </option>
+
+        <option ${data.status === "Rejected" ? "selected" : ""}>
+          Rejected
+        </option>
+
+      </select>
+
+      <button
+        class="primary"
+        onclick="updateComplaint('${id}')"
+      >
+        Update Status
+      </button>
+
+      <textarea
+        id="note-${id}"
+        placeholder="Admin note..."
+      >${escapeHTML(data.adminNote || "")}</textarea>
+
+    </div>
+
+  `;
+
+}
+
+/* =====================================
+   17. UPDATE COMPLAINT STATUS
+===================================== */
+
+window.updateComplaint = async function(id) {
+
+  if (!isAdmin) {
+
+    alert("Unauthorized access.");
+
+    return;
+  }
+
+  const status = $("status-" + id).value;
+
+  const adminNote = $("note-" + id).value.trim();
+
+  try {
+
+    await updateDoc(
+      doc(db, "complaints", id),
+      {
+        status,
+        adminNote
+      }
+    );
+
+    alert("Complaint updated successfully.");
+
+    await loadAdminComplaints();
+
+    await loadStats();
+
+  } catch (error) {
+
+    alert(error.message);
+
+  }
+
+};
+
+/* =====================================
+   18. ADMIN DASHBOARD
+===================================== */
+
+async function loadAdminComplaints() {
+
+  if (!isAdmin) return;
+
+  const q = query(
+    collection(db, "complaints"),
+    orderBy("createdAt", "desc")
+  );
+
+  const snapshot = await getDocs(q);
+
+  if (snapshot.empty) {
+
+    $("adminComplaints").innerHTML =
+      '<div class="empty">No complaints available.</div>';
+
+    return;
+
+  }
+
+  $("adminComplaints").innerHTML =
+    snapshot.docs.map(d => {
+
+      return complaintCard({
+        ...d.data(),
+        id: d.id
+      }, true);
+
+    }).join("");
+
+}
+
+/* =====================================
+   19. STATISTICS
+===================================== */
+
+async function loadStats() {
+
+  try {
+
+    const snapshot = await getDocs(
+      collection(db, "complaints")
+    );
+
+    let total = 0;
+    let pending = 0;
+    let progress = 0;
+    let resolved = 0;
+
+    snapshot.forEach(d => {
+
+      const data = d.data();
+
+      total++;
+
+      if (
+        data.status === "Submitted" ||
+        data.status === "Under Review"
+      ) {
+        pending++;
+      }
+
+      if (data.status === "In Progress") {
+        progress++;
+      }
+
+      if (data.status === "Resolved") {
+        resolved++;
+      }
+
+    });
+
+    $("totalCount").textContent = total;
+    $("pendingCount").textContent = pending;
+    $("progressCount").textContent = progress;
+    $("resolvedCount").textContent = resolved;
+
+  } catch (error) {
+
+    console.error(error);
+
+  }
+
+}
+
+loadStats();
 
 </script>
 
