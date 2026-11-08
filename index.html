@@ -1,980 +1,127 @@
+const SHEET_NAME = "Complaints";
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CampusCare | Campus Problem Reporting</title>
+function setup() {
+  const props = PropertiesService.getScriptProperties();
+  let id = props.getProperty("SPREADSHEET_ID");
 
-<style>
-:root {
-  --green:#176b4d;
-  --light:#eaf6ef;
-  --bg:#f5f8f7;
-  --text:#20332c;
-  --muted:#718078;
-  --red:#dc2626;
-}
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--text)}
-header{background:var(--green);color:white;padding:18px 6%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
-header h2{margin:0}
-button{border:0;padding:11px 16px;border-radius:8px;cursor:pointer;font-weight:bold;margin:3px}
-.primary{background:var(--green);color:white}
-.secondary{background:#e5eee8;color:var(--green)}
-.danger{background:var(--red);color:white}
-.container{max-width:1100px;margin:25px auto;padding:0 16px}
-.card{background:white;padding:22px;border-radius:14px;box-shadow:0 3px 14px #00000008;margin-bottom:18px}
-h1,h2,h3{margin-top:0}
-input,select,textarea{width:100%;padding:12px;margin:7px 0 14px;border:1px solid #d6e0da;border-radius:8px;font:inherit;background:white}
-textarea{min-height:100px;resize:vertical}
-label{font-weight:bold;font-size:14px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
-.stat{padding:20px;background:var(--light);border-radius:12px}
-.stat strong{font-size:28px;display:block}
-.hidden{display:none!important}
-.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
-.nav button{background:white;color:var(--green)}
-.nav button.active{background:var(--green);color:white}
-.badge{display:inline-block;padding:5px 9px;border-radius:20px;font-size:12px;font-weight:bold;background:#e5eee8}
-.High,.Emergency{background:#fee2e2;color:#b91c1c}
-.Medium{background:#ffedd5;color:#c2410c}
-.Low,.Resolved{background:#dcfce7;color:#166534}
-.UnderReview{background:#dbeafe;color:#1d4ed8}
-.InProgress{background:#ffedd5;color:#c2410c}
-.complaint{border:1px solid #e3e9e5;padding:16px;border-radius:10px;margin:12px 0}
-.muted{color:var(--muted);font-size:13px}
-.notice{padding:12px;background:#fff7ed;border-radius:8px;margin:12px 0;color:#9a3412}
-.table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse}
-th,td{text-align:left;padding:12px;border-bottom:1px solid #e5e7eb}
-th{background:#f0f6f2}
-footer{text-align:center;padding:25px;color:var(--muted)}
-</style>
-</head>
+  if (!id) {
+    const ss = SpreadsheetApp.create("Campus Voice Complaints");
+    id = ss.getId();
+    props.setProperty("SPREADSHEET_ID", id);
 
-<body>
-
-<header>
-  <div>
-    <h2>🏫 CampusCare</h2>
-    <small>Smart Campus Problem Reporting System</small>
-  </div>
-  <div>
-    <button class="secondary" onclick="showLogin('student')">Student Login</button>
-    <button class="secondary" onclick="showLogin('admin')">Admin Login</button>
-  </div>
-</header>
-
-<div class="container">
-
-<!-- HOME -->
-<section id="home">
-  <div class="card">
-    <h1>Make Your Campus Better</h1>
-    <p>Report campus problems, track their progress, and help create a safer and better college environment.</p>
-    <button class="primary" onclick="showLogin('student')">Student Login / Register</button>
-    <button class="secondary" onclick="showLogin('admin')">Admin Login</button>
-  </div>
-
-  <div class="grid">
-    <div class="stat"><strong>10</strong>Complaint Categories</div>
-    <div class="stat"><strong>24/7</strong>Reporting Access</div>
-    <div class="stat"><strong>4</strong>Complaint Statuses</div>
-  </div>
-
-  <div class="card">
-    <h3>What can you report?</h3>
-    <div class="grid">
-      <div>🏫 Classrooms</div>
-      <div>🚰 Water and Sanitation</div>
-      <div>💡 Electricity and Lighting</div>
-      <div>📶 Wi-Fi and Internet</div>
-      <div>🪑 Furniture</div>
-      <div>🚻 Washrooms</div>
-      <div>🛣️ Roads and Infrastructure</div>
-      <div>🍱 Mess / Food</div>
-      <div>🏥 Health and Medical Facilities</div>
-      <div>🛡️ Security</div>
-    </div>
-  </div>
-</section>
-
-<!-- STUDENT LOGIN -->
-<section id="studentLogin" class="hidden">
-  <div class="card">
-    <h2>Student Login / Registration</h2>
-    <p class="muted">Use your college ID for this demonstration.</p>
-
-    <label>College ID</label>
-    <input id="studentId" placeholder="Enter college ID">
-
-    <label>Full Name</label>
-    <input id="studentName" placeholder="Enter your name">
-
-    <label>Password</label>
-    <input id="studentPassword" type="password" placeholder="Enter password">
-
-    <button class="primary" onclick="studentLogin()">Login / Register</button>
-    <button class="secondary" onclick="goHome()">Back</button>
-  </div>
-</section>
-
-<!-- ADMIN LOGIN -->
-<section id="adminLogin" class="hidden">
-  <div class="card">
-    <h2>🔐 Admin Login</h2>
-    <p>Authorized college administrators can manage complaints here.</p>
-
-    <label>Admin Username</label>
-    <input id="adminUsername" placeholder="Enter admin username">
-
-    <label>Admin Password</label>
-    <input id="adminPassword" type="password" placeholder="Enter admin password">
-
-    <button class="primary" onclick="adminLogin()">Login as Admin</button>
-    <button class="secondary" onclick="goHome()">Back</button>
-
-    <div class="notice">
-      Demo credentials:<br>
-      Username: <b>admin</b><br>
-      Password: <b>Campus@123</b>
-    </div>
-  </div>
-</section>
-
-<!-- STUDENT DASHBOARD -->
-<section id="studentDashboard" class="hidden">
-  <div class="card">
-    <h2 id="welcomeStudent">Student Dashboard</h2>
-    <p>Report a new issue or track your existing complaints.</p>
-    <button class="primary" onclick="showStudentTab('report')">＋ Report Problem</button>
-    <button class="secondary" onclick="showStudentTab('my')">My Complaints</button>
-    <button class="secondary" onclick="showStudentTab('notifications')">Notifications</button>
-    <button class="secondary" onclick="logout()">Logout</button>
-  </div>
-
-  <div class="nav">
-    <button onclick="showStudentTab('report')">Report Problem</button>
-    <button onclick="showStudentTab('my')">My Complaints</button>
-    <button onclick="showStudentTab('notifications')">Notifications</button>
-    <button class="danger" onclick="showStudentTab('emergency')">🚨 Emergency</button>
-  </div>
-
-  <div id="reportTab" class="card">
-    <h2>Submit a Complaint</h2>
-
-    <form id="complaintForm">
-      <label>Complaint Category</label>
-      <select id="category" required>
-        <option value="">Select category</option>
-        <option>Classrooms</option>
-        <option>Water and Sanitation</option>
-        <option>Electricity and Lighting</option>
-        <option>Wi-Fi and Internet</option>
-        <option>Furniture</option>
-        <option>Washrooms</option>
-        <option>Roads and Infrastructure</option>
-        <option>Mess/Food</option>
-        <option>Health and Medical Facilities</option>
-        <option>Security</option>
-      </select>
-
-      <label>Exact Location</label>
-      <input id="location" required placeholder="Building, floor, room number">
-
-      <label>Detailed Description</label>
-      <textarea id="description" required placeholder="Describe the problem clearly"></textarea>
-
-      <label>Priority Level</label>
-      <select id="priority" required>
-        <option>Low</option>
-        <option>Medium</option>
-        <option>High</option>
-        <option>Emergency</option>
-      </select>
-
-      <label>Upload Photos or Videos</label>
-      <input id="media" type="file" accept="image/*,video/*" multiple>
-
-      <label>
-        <input id="anonymous" type="checkbox" style="width:auto">
-        Submit anonymously
-      </label>
-
-      <p class="muted">This demo does not guarantee anonymity.</p>
-      <button class="primary" type="submit">Submit Complaint</button>
-    </form>
-  </div>
-
-  <div id="myTab" class="card hidden">
-    <h2>My Complaints</h2>
-    <div id="studentComplaints"></div>
-  </div>
-
-  <div id="notificationsTab" class="card hidden">
-    <h2>Notifications</h2>
-    <div id="studentNotifications"></div>
-  </div>
-
-  <div id="emergencyTab" class="card hidden">
-    <h2>🚨 Emergency Reporting</h2>
-    <div class="notice">
-      If someone is in immediate danger, contact campus security or local emergency services directly. This demo is not monitored in real time.
-    </div>
-
-    <label>Emergency Type</label>
-    <select id="emergencyCategory">
-      <option>Security</option>
-      <option>Health and Medical Facilities</option>
-      <option>Electricity and Lighting</option>
-      <option>Other Emergency</option>
-    </select>
-
-    <label>Location</label>
-    <input id="emergencyLocation" placeholder="Exact location">
-
-    <label>Details</label>
-    <textarea id="emergencyDescription" placeholder="Explain the emergency"></textarea>
-
-    <button class="danger" onclick="submitEmergency()">Submit Emergency Report</button>
-  </div>
-</section>
-
-<!-- ADMIN DASHBOARD -->
-<section id="adminDashboard" class="hidden">
-
-  <div class="card">
-    <h2>🔐 Admin Dashboard</h2>
-    <p>Manage campus complaints, departments, priorities, and resolution updates.</p>
-    <button class="secondary" onclick="logout()">Logout</button>
-  </div>
-
-  <div class="grid">
-    <div class="stat"><strong id="totalCount">0</strong>Total Complaints</div>
-    <div class="stat"><strong id="pendingCount">0</strong>Pending</div>
-    <div class="stat"><strong id="progressCount">0</strong>In Progress</div>
-    <div class="stat"><strong id="resolvedCount">0</strong>Resolved</div>
-    <div class="stat"><strong id="emergencyCount">0</strong>Emergency</div>
-  </div>
-
-  <div class="nav">
-    <button onclick="showAdminTab('all')">All Complaints</button>
-    <button onclick="showAdminTab('urgent')">Urgent / Emergency</button>
-    <button onclick="showAdminTab('analytics')">Analytics</button>
-    <button onclick="showAdminTab('history')">History</button>
-    <button onclick="showAdminTab('departments')">Departments</button>
-  </div>
-
-  <div id="allTab" class="card">
-    <h2>All Complaints</h2>
-
-    <label>Search Complaints</label>
-    <input id="searchComplaints" placeholder="Search ID, category, location..." oninput="renderAdmin()">
-
-    <label>Filter by Status</label>
-    <select id="statusFilter" onchange="renderAdmin()">
-      <option value="">All Statuses</option>
-      <option>Submitted</option>
-      <option>Under Review</option>
-      <option>In Progress</option>
-      <option>Resolved</option>
-    </select>
-
-    <label>Filter by Department</label>
-    <select id="departmentFilter" onchange="renderAdmin()">
-      <option value="">All Departments</option>
-      <option>Maintenance</option>
-      <option>Water and Sanitation</option>
-      <option>Electrical</option>
-      <option>IT Department</option>
-      <option>Furniture Maintenance</option>
-      <option>Infrastructure</option>
-      <option>Mess Management</option>
-      <option>Medical Department</option>
-      <option>Campus Security</option>
-      <option>Administration</option>
-    </select>
-
-    <div id="adminComplaints"></div>
-  </div>
-
-  <div id="urgentTab" class="card hidden">
-    <h2>Urgent / Emergency Complaints</h2>
-    <div id="urgentComplaints"></div>
-  </div>
-
-  <div id="analyticsTab" class="card hidden">
-    <h2>Campus Problem Analytics</h2>
-    <div id="analytics"></div>
-  </div>
-
-  <div id="historyTab" class="card hidden">
-    <h2>Complaint History</h2>
-    <div id="history"></div>
-  </div>
-
-  <div id="departmentsTab" class="card hidden">
-    <h2>Department Access</h2>
-    <p>Demo department roles. A real system must enforce permissions on a secure server.</p>
-
-    <label>Select Department</label>
-    <select id="roleDepartment">
-      <option>Maintenance</option>
-      <option>Water and Sanitation</option>
-      <option>Electrical</option>
-      <option>IT Department</option>
-      <option>Furniture Maintenance</option>
-      <option>Infrastructure</option>
-      <option>Mess Management</option>
-      <option>Medical Department</option>
-      <option>Campus Security</option>
-      <option>Administration</option>
-    </select>
-
-    <button class="primary" onclick="setDepartment()">View Department Complaints</button>
-    <div id="departmentComplaints"></div>
-  </div>
-
-</section>
-</div>
-
-<footer>
-  CampusCare | Design Thinking Project Prototype<br>
-  <small>Demo version. Not intended for real emergency or confidential complaint management.</small>
-</footer>
-
-<script>
-const ADMIN_USER = "admin";
-const ADMIN_PASS = "Campus@123";
-
-const categories = {
-  "Classrooms":"Maintenance",
-  "Water and Sanitation":"Water and Sanitation",
-  "Electricity and Lighting":"Electrical",
-  "Wi-Fi and Internet":"IT Department",
-  "Furniture":"Furniture Maintenance",
-  "Washrooms":"Water and Sanitation",
-  "Roads and Infrastructure":"Infrastructure",
-  "Mess/Food":"Mess Management",
-  "Health and Medical Facilities":"Medical Department",
-  "Security":"Campus Security"
-};
-
-const statuses = ["Submitted","Under Review","In Progress","Resolved"];
-
-let currentStudent = null;
-let currentRole = "student";
-
-function getComplaints(){
-  return JSON.parse(localStorage.getItem("campusComplaints")||"[]");
-}
-function saveComplaints(data){
-  localStorage.setItem("campusComplaints",JSON.stringify(data));
-}
-function getUsers(){
-  return JSON.parse(localStorage.getItem("campusUsers")||"{}");
-}
-function saveUsers(data){
-  localStorage.setItem("campusUsers",JSON.stringify(data));
-}
-function getNotifications(){
-  return JSON.parse(localStorage.getItem("campusNotifications")||"[]");
-}
-function saveNotifications(data){
-  localStorage.setItem("campusNotifications",JSON.stringify(data));
-}
-function getHistory(){
-  return JSON.parse(localStorage.getItem("campusHistory")||"[]");
-}
-function saveHistory(data){
-  localStorage.setItem("campusHistory",JSON.stringify(data));
+    const sheet = ss.getActiveSheet();
+    sheet.setName(SHEET_NAME);
+    sheet.appendRow([
+      "ID", "Date", "Student Name", "College ID",
+      "Category", "Location", "Description",
+      "Priority", "Status", "Admin Reply"
+    ]);
+  }
+  return "Setup complete";
 }
 
-function hideAll(){
-  ["home","studentLogin","adminLogin","studentDashboard","adminDashboard"]
-  .forEach(id=>document.getElementById(id).classList.add("hidden"));
-}
-function goHome(){
-  hideAll();
-  document.getElementById("home").classList.remove("hidden");
-}
-function showLogin(type){
-  hideAll();
-  document.getElementById(type==="admin"?"adminLogin":"studentLogin")
-  .classList.remove("hidden");
+function doGet() {
+  return HtmlService.createHtmlOutputFromFile("Index")
+    .setTitle("Campus Voice");
 }
 
-function studentLogin(){
-  const id=document.getElementById("studentId").value.trim();
-  const name=document.getElementById("studentName").value.trim();
-  const password=document.getElementById("studentPassword").value;
+function getSheet() {
+  const id = PropertiesService.getScriptProperties()
+    .getProperty("SPREADSHEET_ID");
 
-  if(!id||!name||!password){
-    alert("Please enter college ID, name, and password.");
-    return;
+  if (!id) throw new Error("Run setup() first.");
+
+  return SpreadsheetApp.openById(id).getSheetByName(SHEET_NAME);
+}
+
+function submitComplaint(data) {
+  if (!data || !data.name || !data.collegeId ||
+      !data.category || !data.description) {
+    throw new Error("Please fill all required fields.");
   }
 
-  const users=getUsers();
+  const id = "CV-" + Date.now();
 
-  if(users[id]&&users[id].password!==password){
-    alert("Incorrect password.");
-    return;
+  getSheet().appendRow([
+    id,
+    new Date(),
+    data.name,
+    data.collegeId,
+    data.category,
+    data.location || "",
+    data.description,
+    data.priority || "Medium",
+    "Submitted",
+    ""
+  ]);
+
+  return "Complaint submitted successfully! Your ID: " + id;
+}
+
+function adminLogin(username, password) {
+  const props = PropertiesService.getScriptProperties();
+
+  if (
+    username !== props.getProperty("ADMIN_USERNAME") ||
+    password !== props.getProperty("ADMIN_PASSWORD")
+  ) {
+    throw new Error("Invalid admin username or password.");
   }
 
-  if(!users[id]){
-    users[id]={name,password};
-    saveUsers(users);
-  }
-
-  currentStudent={id,name:users[id].name};
-  currentRole="student";
-
-  hideAll();
-  document.getElementById("studentDashboard").classList.remove("hidden");
-  document.getElementById("welcomeStudent").textContent="Welcome, "+currentStudent.name;
-
-  showStudentTab("report");
-}
-
-function adminLogin(){
-  const username=document.getElementById("adminUsername").value;
-  const password=document.getElementById("adminPassword").value;
-
-  if(username===ADMIN_USER&&password===ADMIN_PASS){
-    currentRole="admin";
-    currentStudent=null;
-
-    hideAll();
-    document.getElementById("adminDashboard").classList.remove("hidden");
-
-    renderAdmin();
-    renderUrgent();
-    renderAnalytics();
-    renderHistory();
-  }else{
-    alert("Invalid admin username or password.");
-  }
-}
-
-function logout(){
-  currentStudent=null;
-  currentRole="student";
-  goHome();
-}
-
-function showStudentTab(tab){
-  ["report","my","notifications","emergency"].forEach(name=>{
-    document.getElementById(name+"Tab").classList.add("hidden");
-  });
-
-  document.getElementById(tab+"Tab").classList.remove("hidden");
-
-  if(tab==="my")renderStudentComplaints();
-  if(tab==="notifications")renderStudentNotifications();
-}
-
-function showAdminTab(tab){
-  ["all","urgent","analytics","history","departments"].forEach(name=>{
-    document.getElementById(name+"Tab").classList.add("hidden");
-  });
-
-  document.getElementById(tab+"Tab").classList.remove("hidden");
-
-  if(tab==="all")renderAdmin();
-  if(tab==="urgent")renderUrgent();
-  if(tab==="analytics")renderAnalytics();
-  if(tab==="history")renderHistory();
-}
-
-function departmentFor(category){
-  return categories[category]||"Administration";
-}
-
-function makeId(){
-  return "CC-"+Date.now().toString().slice(-8);
-}
-
-function addNotification(complaint,message){
-  const notifications=getNotifications();
-
-  notifications.unshift({
-    id:Date.now(),
-    complaintId:complaint.id,
-    studentId:complaint.studentId,
-    message,
-    date:new Date().toLocaleString()
-  });
-
-  saveNotifications(notifications);
-}
-
-function addHistory(complaint,message){
-  const history=getHistory();
-
-  history.unshift({
-    complaintId:complaint.id,
-    message,
-    date:new Date().toLocaleString()
-  });
-
-  saveHistory(history);
-}
-
-function submitComplaint(category,location,description,priority,anonymous,files){
-  if(!category||!location||!description){
-    alert("Please fill in all required fields.");
-    return;
-  }
-
-  const complaints=getComplaints();
-
-  const duplicate=complaints.find(c=>
-    c.category===category&&
-    c.location.toLowerCase()===location.toLowerCase()&&
-    c.status!=="Resolved"
+  const token = Utilities.getUuid();
+  CacheService.getScriptCache().put(
+    "admin_" + token, "valid", 21600
   );
 
-  if(duplicate){
-    if(!confirm("A similar unresolved complaint exists ("+duplicate.id+"). Submit another anyway?")){
-      return;
-    }
+  return token;
+}
+
+function checkAdmin(token) {
+  return !!token &&
+    CacheService.getScriptCache().get("admin_" + token) === "valid";
+}
+
+function getComplaints(token) {
+  if (!checkAdmin(token)) {
+    throw new Error("Please log in as admin.");
   }
 
-  const complaint={
-    id:makeId(),
-    studentId:currentStudent.id,
-    studentName:currentStudent.name,
-    anonymous,
-    category,
-    location,
-    description,
-    priority,
-    department:departmentFor(category),
-    status:"Submitted",
-    date:new Date().toISOString(),
-    updated:new Date().toISOString(),
-    media:files,
-    resolutionProof:"",
-    feedback:"",
-    assignedTo:"",
-    escalation:false,
-    emergency:priority==="Emergency"
-  };
+  const rows = getSheet().getDataRange().getValues();
+  if (rows.length <= 1) return [];
 
-  complaints.unshift(complaint);
-  saveComplaints(complaints);
-
-  addNotification(complaint,"Your complaint "+complaint.id+" was submitted.");
-  addHistory(complaint,"Complaint submitted.");
-
-  alert("Complaint submitted successfully! ID: "+complaint.id);
+  return rows.slice(1).map((r, i) => ({
+    row: i + 2,
+    id: r[0],
+    date: r[1] instanceof Date
+      ? r[1].toLocaleString()
+      : String(r[1]),
+    name: r[2],
+    collegeId: r[3],
+    category: r[4],
+    location: r[5],
+    description: r[6],
+    priority: r[7],
+    status: r[8],
+    reply: r[9]
+  }));
 }
 
-document.getElementById("complaintForm").addEventListener("submit",async function(e){
-  e.preventDefault();
-
-  const files=Array.from(document.getElementById("media").files);
-  const mediaData=[];
-
-  for(const file of files){
-    if(file.size>2*1024*1024){
-      alert("Each file must be below 2 MB for this demo.");
-      return;
-    }
-
-    const data=await new Promise(resolve=>{
-      const reader=new FileReader();
-      reader.onload=()=>resolve(reader.result);
-      reader.readAsDataURL(file);
-    });
-
-    mediaData.push({name:file.name,type:file.type,data});
+function updateComplaint(token, row, status, reply) {
+  if (!checkAdmin(token)) {
+    throw new Error("Please log in as admin.");
   }
 
-  submitComplaint(
-    document.getElementById("category").value,
-    document.getElementById("location").value.trim(),
-    document.getElementById("description").value.trim(),
-    document.getElementById("priority").value,
-    document.getElementById("anonymous").checked,
-    mediaData
-  );
+  const sheet = getSheet();
+  const rowNumber = Number(row);
 
-  this.reset();
-});
-
-function submitEmergency(){
-  const category=document.getElementById("emergencyCategory").value;
-  const location=document.getElementById("emergencyLocation").value.trim();
-  const description=document.getElementById("emergencyDescription").value.trim();
-
-  if(!location||!description){
-    alert("Please enter location and details.");
-    return;
+  if (!Number.isInteger(rowNumber) ||
+      rowNumber < 2 ||
+      rowNumber > sheet.getLastRow()) {
+    throw new Error("Invalid complaint.");
   }
 
-  submitComplaint(category,location,description,"Emergency",false,[]);
+  sheet.getRange(rowNumber, 9).setValue(status);
+  sheet.getRange(rowNumber, 10).setValue(reply || "");
+
+  return "Complaint updated successfully.";
 }
-
-function escapeHTML(value){
-  return String(value??"").replace(/[&<>"']/g,c=>({
-    "&":"&amp;",
-    "<":"&lt;",
-    ">":"&gt;",
-    '"':"&quot;",
-    "'":"&#39;"
-  }[c]));
-}
-
-function mediaHTML(media){
-  if(!media||!media.length)return "";
-
-  return media.map(file=>{
-    if(file.type.startsWith("image/")){
-      return `<p><img src="${file.data}" alt="Complaint evidence" style="max-width:220px;border-radius:8px"></p>`;
-    }
-
-    if(file.type.startsWith("video/")){
-      return `<p><video controls style="max-width:220px"><source src="${file.data}" type="${file.type}"></video></p>`;
-    }
-
-    return "";
-  }).join("");
-}
-
-function renderStudentComplaints(){
-  const complaints=getComplaints().filter(c=>c.studentId===currentStudent.id);
-  const container=document.getElementById("studentComplaints");
-
-  if(!complaints.length){
-    container.innerHTML="<p>No complaints submitted yet.</p>";
-    return;
-  }
-
-  container.innerHTML=complaints.map(c=>`
-    <div class="complaint">
-      <h3>${escapeHTML(c.id)} - ${escapeHTML(c.category)}</h3>
-      <p><b>Location:</b> ${escapeHTML(c.location)}</p>
-      <p>${escapeHTML(c.description)}</p>
-      <p><b>Department:</b> ${escapeHTML(c.department)}</p>
-      <p><b>Priority:</b> <span class="badge ${c.priority}">${escapeHTML(c.priority)}</span></p>
-      <p><b>Status:</b> <span class="badge ${c.status.replaceAll(" ","")}">${escapeHTML(c.status)}</span></p>
-      <p class="muted">Submitted: ${new Date(c.date).toLocaleString()}</p>
-      ${mediaHTML(c.media)}
-      ${c.resolutionProof?`<p><b>Resolution proof:</b> ${escapeHTML(c.resolutionProof)}</p>`:""}
-      ${c.status==="Resolved"?`
-        <label>Feedback</label>
-        <textarea id="feedback-${c.id}" placeholder="Share feedback" ${c.feedback?"disabled":""}>${escapeHTML(c.feedback)}</textarea>
-        ${!c.feedback?`<button class="primary" onclick="submitFeedback('${c.id}')">Submit Feedback</button>`:""}
-      `:""}
-    </div>
-  `).join("");
-}
-
-function submitFeedback(id){
-  const complaints=getComplaints();
-  const complaint=complaints.find(c=>c.id===id);
-  const feedback=document.getElementById("feedback-"+id).value.trim();
-
-  if(!feedback){
-    alert("Please enter feedback.");
-    return;
-  }
-
-  complaint.feedback=feedback;
-  saveComplaints(complaints);
-  addHistory(complaint,"Student feedback submitted.");
-  renderStudentComplaints();
-}
-
-function renderStudentNotifications(){
-  const notifications=getNotifications().filter(n=>n.studentId===currentStudent.id);
-  const container=document.getElementById("studentNotifications");
-
-  if(!notifications.length){
-    container.innerHTML="<p>No notifications yet.</p>";
-    return;
-  }
-
-  container.innerHTML=notifications.map(n=>`
-    <div class="complaint">
-      <b>${escapeHTML(n.complaintId)}</b>
-      <p>${escapeHTML(n.message)}</p>
-      <small class="muted">${escapeHTML(n.date)}</small>
-    </div>
-  `).join("");
-}
-
-function changeStatus(id,newStatus){
-  const complaints=getComplaints();
-  const complaint=complaints.find(c=>c.id===id);
-
-  if(!complaint)return;
-
-  if(complaint.status==="Resolved"&&newStatus!=="Resolved"){
-    if(!confirm("Reopen this resolved complaint?"))return;
-  }
-
-  complaint.status=newStatus;
-  complaint.updated=new Date().toISOString();
-
-  saveComplaints(complaints);
-  addNotification(complaint,"Complaint status changed to "+newStatus+".");
-  addHistory(complaint,"Status changed to "+newStatus+".");
-
-  renderAdmin();
-  renderUrgent();
-  renderAnalytics();
-  renderHistory();
-}
-
-function assignDepartment(id,department){
-  const complaints=getComplaints();
-  const complaint=complaints.find(c=>c.id===id);
-
-  if(!complaint)return;
-
-  complaint.department=department;
-  complaint.updated=new Date().toISOString();
-
-  saveComplaints(complaints);
-  addNotification(complaint,"Complaint assigned to "+department+".");
-  addHistory(complaint,"Assigned to "+department+".");
-
-  renderAdmin();
-}
-
-function assignPerson(id){
-  const name=prompt("Enter staff member or authority name:");
-  if(!name)return;
-
-  const complaints=getComplaints();
-  const complaint=complaints.find(c=>c.id===id);
-
-  if(!complaint)return;
-
-  complaint.assignedTo=name;
-  saveComplaints(complaints);
-  addHistory(complaint,"Assigned to "+name+".");
-  renderAdmin();
-}
-
-function uploadResolution(id){
-  const proof=prompt("Enter resolution details or proof reference:");
-  if(!proof)return;
-
-  const complaints=getComplaints();
-  const complaint=complaints.find(c=>c.id===id);
-
-  if(!complaint)return;
-
-  complaint.resolutionProof=proof;
-  saveComplaints(complaints);
-
-  addHistory(complaint,"Resolution proof added.");
-  addNotification(complaint,"Resolution proof has been added.");
-
-  renderAdmin();
-}
-
-function renderAdmin(){
-  const complaints=getComplaints();
-
-  document.getElementById("totalCount").textContent=complaints.length;
-
-  document.getElementById("pendingCount").textContent=
-    complaints.filter(c=>c.status==="Submitted"||c.status==="Under Review").length;
-
-  document.getElementById("progressCount").textContent=
-    complaints.filter(c=>c.status==="In Progress").length;
-
-  document.getElementById("resolvedCount").textContent=
-    complaints.filter(c=>c.status==="Resolved").length;
-
-  document.getElementById("emergencyCount").textContent=
-    complaints.filter(c=>c.priority==="Emergency").length;
-
-  const search=(document.getElementById("searchComplaints")?.value||"").toLowerCase();
-  const status=document.getElementById("statusFilter")?.value||"";
-  const department=document.getElementById("departmentFilter")?.value||"";
-
-  const filtered=complaints.filter(c=>
-    (
-      c.id.toLowerCase().includes(search)||
-      c.category.toLowerCase().includes(search)||
-      c.location.toLowerCase().includes(search)||
-      c.description.toLowerCase().includes(search)
-    )&&
-    (!status||c.status===status)&&
-    (!department||c.department===department)
-  );
-
-  document.getElementById("adminComplaints").innerHTML=
-    filtered.map(adminComplaintHTML).join("")||"<p>No matching complaints.</p>";
-}
-
-function adminComplaintHTML(c){
-  return `
-    <div class="complaint">
-      <h3>${escapeHTML(c.id)} - ${escapeHTML(c.category)}</h3>
-      <p><b>Location:</b> ${escapeHTML(c.location)}</p>
-      <p><b>Description:</b> ${escapeHTML(c.description)}</p>
-      <p><b>Student:</b> ${c.anonymous?"Anonymous":escapeHTML(c.studentName)}</p>
-      <p><b>Priority:</b> <span class="badge ${c.priority}">${escapeHTML(c.priority)}</span></p>
-      <p><b>Status:</b> <span class="badge ${c.status.replaceAll(" ","")}">${escapeHTML(c.status)}</span></p>
-      <p><b>Department:</b> ${escapeHTML(c.department)}</p>
-      <p><b>Assigned Staff:</b> ${escapeHTML(c.assignedTo||"Not assigned")}</p>
-      <p class="muted">Submitted: ${new Date(c.date).toLocaleString()}</p>
-
-      ${mediaHTML(c.media)}
-
-      ${c.resolutionProof?`<p><b>Resolution proof:</b> ${escapeHTML(c.resolutionProof)}</p>`:""}
-      ${c.feedback?`<p><b>Student feedback:</b> ${escapeHTML(c.feedback)}</p>`:""}
-
-      <label>Update Status</label>
-      <select onchange="changeStatus('${c.id}',this.value)">
-        ${statuses.map(s=>`<option ${s===c.status?"selected":""}>${s}</option>`).join("")}
-      </select>
-
-      <label>Assign Department</label>
-      <select onchange="assignDepartment('${c.id}',this.value)">
-        ${[
-          "Maintenance","Water and Sanitation","Electrical","IT Department",
-          "Furniture Maintenance","Infrastructure","Mess Management",
-          "Medical Department","Campus Security","Administration"
-        ].map(d=>`<option ${d===c.department?"selected":""}>${d}</option>`).join("")}
-      </select>
-
-      <button class="secondary" onclick="assignPerson('${c.id}')">Assign Staff</button>
-      <button class="secondary" onclick="uploadResolution('${c.id}')">Add Resolution Proof</button>
-    </div>
-  `;
-}
-
-function renderUrgent(){
-  const complaints=getComplaints().filter(c=>c.priority==="Emergency"||c.priority==="High");
-
-  document.getElementById("urgentComplaints").innerHTML=
-    complaints.map(adminComplaintHTML).join("")||"<p>No urgent complaints.</p>";
-}
-
-function renderAnalytics(){
-  const complaints=getComplaints();
-  const byCategory={};
-  const byLocation={};
-  const byStatus={};
-
-  complaints.forEach(c=>{
-    byCategory[c.category]=(byCategory[c.category]||0)+1;
-    byLocation[c.location]=(byLocation[c.location]||0)+1;
-    byStatus[c.status]=(byStatus[c.status]||0)+1;
-  });
-
-  function rows(data){
-    return Object.entries(data)
-      .sort((a,b)=>b[1]-a[1])
-      .map(([key,value])=>`<tr><td>${escapeHTML(key)}</td><td>${value}</td></tr>`)
-      .join("");
-  }
-
-  document.getElementById("analytics").innerHTML=`
-    <h3>Complaints by Category</h3>
-    <div class="table-wrap"><table>
-      <tr><th>Category</th><th>Count</th></tr>
-      ${rows(byCategory)}
-    </table></div>
-
-    <h3>Frequently Affected Locations</h3>
-    <div class="table-wrap"><table>
-      <tr><th>Location</th><th>Count</th></tr>
-      ${rows(byLocation)}
-    </table></div>
-
-    <h3>Status Summary</h3>
-    <div class="table-wrap"><table>
-      <tr><th>Status</th><th>Count</th></tr>
-      ${rows(byStatus)}
-    </table></div>
-
-    <button class="primary" onclick="exportCSV()">Export Complaints CSV</button>
-  `;
-}
-
-function renderHistory(){
-  const history=getHistory();
-
-  document.getElementById("history").innerHTML=
-    history.map(h=>`
-      <div class="complaint">
-        <b>${escapeHTML(h.complaintId)}</b>
-        <p>${escapeHTML(h.message)}</p>
-        <small class="muted">${escapeHTML(h.date)}</small>
-      </div>
-    `).join("")||"<p>No history available.</p>";
-}
-
-function setDepartment(){
-  const department=document.getElementById("roleDepartment").value;
-  const complaints=getComplaints().filter(c=>c.department===department);
-
-  document.getElementById("departmentComplaints").innerHTML=
-    complaints.map(adminComplaintHTML).join("")||"<p>No complaints for this department.</p>";
-}
-
-function exportCSV(){
-  const complaints=getComplaints();
-
-  const fields=[
-    "id","category","location","description","priority",
-    "department","status","date","assignedTo"
-  ];
-
-  const csv=[
-    fields.join(","),
-    ...complaints.map(c=>fields.map(f=>
-      '"'+String(c[f]||"").replaceAll('"','""')+'"'
-    ).join(","))
-  ].join("\n");
-
-  const blob=new Blob([csv],{type:"text/csv"});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement("a");
-
-  a.href=url;
-  a.download="CampusCare_Complaints.csv";
-  a.click();
-
-  URL.revokeObjectURL(url);
-}
-
-/* AUTOMATIC ESCALATION AFTER 48 HOURS */
-function checkEscalation(){
-  const complaints=getComplaints();
-  const now=Date.now();
-  let changed=false;
-
-  complaints.forEach(c=>{
-    const hours=(now-new Date(c.date).getTime())/3600000;
-
-    if(hours>=48&&c.status!=="Resolved"&&!c.escalation){
-      c.escalation=true;
-      c.priority=c.priority==="Emergency"?"Emergency":"High";
-      c.department="Administration";
-
-      addNotification(c,"Complaint escalated to Administration due to delay.");
-      addHistory(c,"Automatically escalated after 48 hours.");
-
-      changed=true;
-    }
-  });
-
-  if(changed)saveComplaints(complaints);
-}
-
-checkEscalation();
-goHome();
-</script>
-
-</body>
-</html>
